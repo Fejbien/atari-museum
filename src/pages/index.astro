@@ -1,10 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro";
+
+const response = await fetch(import.meta.env.API_URL + "/telefony", {
+    headers: {
+        apikey: import.meta.env.API_KEY,
+    },
+});
+const data = await response.json();
 ---
 
-<Layout title="Atari muzeum">
-    <div class="w-full h-screen bg-mainBg">
-        <Header />
-    </div>
+<Layout title="Atari muzeum"
+    ><h1>
+        {JSON.stringify(data)}
+    </h1>
 </Layout>
