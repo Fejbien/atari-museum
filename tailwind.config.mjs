@@ -2,10 +2,10 @@
 export default {
     content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
     theme: {
-        colors: {
-            mainBg: "#32cc33",
-        },
         extend: {
+            colors: {
+                mainBg: "#32cc33",
+            },
             height: {
                 screen: [
                     "100vh /* fallback for Opera, IE and etc. */",
