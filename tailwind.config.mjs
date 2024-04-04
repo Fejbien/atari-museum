@@ -5,6 +5,7 @@ export default {
         extend: {
             colors: {
                 mainBg: "#32cc33",
+                mainBgDark: "#d1d1d1",
             },
             height: {
                 screen: [
