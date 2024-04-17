@@ -23,7 +23,9 @@ interface PhoneData {
     life_timer: string;
 }
 
+
 /*
+    TODO: Calosc zrobic jako wyglad z bazy danych taka ala tabelke ktora bedzie mozna paginowac 
 <div><h1>{data.producent} {data.model}</h1></div>
             <div>
                 <p>oznaczenie: {data.oznaczenie}</p>
@@ -44,7 +46,7 @@ interface PhoneData {
             </div>
 */
 
-const PhoneEntrie = ({ data }: { data: PhoneData }) => {
+const PhoneEntry = ({ data }: { data: PhoneData }) => {
     return (
         <div class="bg-white border-[3px] border-black flex flex-col mt-4 min-w-80 w-[24%]">
             <div class="bg-mainBgDark text-lg p-2 font-bold font-pixeledFont flex flex-row justify-between items-center">
@@ -64,4 +66,4 @@ const PhoneEntrie = ({ data }: { data: PhoneData }) => {
         </div>);
 };
 
-export default PhoneEntrie;
+export default PhoneEntry;
