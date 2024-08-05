@@ -1,6 +1,6 @@
 ---
+import PhoneImageGallery from "../components/PhoneImageGallery";
 import Layout from "../layouts/Layout.astro";
-import FullPhoneEntry from "../components/FullPhoneEntry";
 import { supabase } from "./../utils/supabase";
 
 interface PhoneData {
@@ -34,6 +34,7 @@ const { data: pData, error: phoneError } = await supabase
     .eq("id", id);
 const phoneData = pData as PhoneData[];
 if (phoneError) console.error(phoneError);
+const data = phoneData[0];
 
 const { data: imageNamesFetch, error: imagesError } = await supabase.storage
     .from("images")
@@ -51,26 +52,48 @@ const imageUrls = imageNames?.map((imageName) => {
 ---
 
 <Layout title="Atari muzeum">
-    <div class="flex justify-center flex-row min-h-full">
-        <div class="flex flex-col w-1/6 min-w-60 p-4">
+    <div class="flex flex-row min-h-full justify-center">
+        <div
+            class="bg-white border-[3px] border-black flex flex-col m-4 min-w-80 w-auto"
+        >
             <div
-                class="flex flex-row w-full gap-4 flex-wrap h-full 2xl:justify-center"
+                class="bg-mainBgDark text-lg p-2 font-bold font-pixeledFont flex flex-row justify-between items-center"
             >
-                {
-                    phoneData &&
-                        phoneData.map((item: PhoneData) => {
-                            return <FullPhoneEntry data={item} />;
-                        })
-                }
+                <h1>{data.producent} {data.model}</h1>
             </div>
-            {
-                imageUrls &&
-                    imageUrls.map((url) => {
-                        return (
-                            <img src={url} alt="image" class="w-1/2 h-1/2" />
-                        );
-                    })
-            }
+            <div class="flex flex-col p-2">
+                <p>id: {data.id}</p>
+                <p>producent: {data.producent}</p>
+                <p>model: {data.model}</p>
+                <p>oznaczenie: {data.oznaczenie}</p>
+                <p>kolor: {data.kolor}</p>
+                <p>sprawny: {data.sprawny ? "tak" : "nie"}</p>
+                <p>stan: {data.stan}</p>
+                <p>numer seryjny: {data.numer_seryjny}</p>
+                <p>kraj: {data.kraj}</p>
+                <p>jezyk: {data.jezyk}</p>
+                <p>simlock: {data.simlock}</p>
+                <p>uwagi: {data.uwagi}</p>
+                <p>opakowanie: {data.opakowanie ? "tak" : "nie"}</p>
+                <p>
+                    rok produkcji: {
+                        data.rok_produkcji
+                            ? data.rok_produkcji.toString()
+                            : "N/A"
+                    }
+                </p>
+                <p>zdarzenie: {data.zdarzenie}</p>
+                <p>model baterii: {data.model_baterii}</p>
+                <p>made: {data.made ? data.made.toString() : "N/A"}</p>
+                <p>life_timer: {data.life_timer}</p>
+                <p>posiadany: {data.posiadany ? "tak" : "nie"}</p>
+                <p>
+                    <span class="text-red-800">uwagi:</span>
+                    {data.uwagi}
+                </p>
+            </div>
         </div>
+
+        <PhoneImageGallery imageUrls={imageUrls} client:only="react" />
     </div>
 </Layout>
