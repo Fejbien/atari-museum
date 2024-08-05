@@ -1,0 +1,56 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PhoneEntry from "../components/PhoneEntry";
+
+interface PhoneData {
+    id: number;
+    producent: string;
+    model: string;
+    oznaczenie: string;
+    kolor: string;
+    sprawny: boolean;
+    stan: string;
+    numer_seryjny: string;
+    kraj: string;
+    jezyk: string;
+    simlock: string;
+    uwagi: string;
+    opakowanie: boolean;
+    rok_produkcji: Date;
+    zdarzenie: string;
+    model_baterii: string;
+    made: Date;
+    life_timer: string;
+    posiadany: boolean;
+}
+
+const response = await fetch(import.meta.env.API_URL + "/telefony", {
+    headers: {
+        apikey: import.meta.env.API_KEY,
+    },
+});
+
+const data = await response.json();
+---
+
+<Layout title="Atari muzeum">
+    <div class="flex justify-center flex-row min-h-full">
+        <div class="flex flex-col w-1/6 min-w-60 p-4">
+            <h1 class="text-3xl font-bold">Telefony</h1>
+            <p class="text-lg">filtrowankoi tu bedzie</p>
+        </div>
+        <div
+            class="flex flex-row w-full gap-4 flex-wrap h-full 2xl:justify-center"
+        >
+            {
+                data &&
+                    data.map((item: PhoneData) => {
+                        return <PhoneEntry data={item} />;
+                    })
+            }
+        </div>
+    </div>
+    <a href="/form" class="fixed bottom-4 right-4 bg-blue-500 text-white p-2 rounded">
+        Dodaj telefon
+    </a>
+</Layout>
