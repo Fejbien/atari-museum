@@ -1,49 +1,41 @@
 ---
 import React from "react";
-import FlagPicker from "../components/FlagPicker.astro";
+import FlagPicker from "./FlagPicker.astro";
+import { supabase } from "../utils/supabase";
 
 if (Astro.request.method === "POST") {
     const formData = await Astro.request.formData();
 
-    let data: { [key: string]: any } = {};
+    let dataVals: { [key: string]: any } = {};
     for (const [key, value] of formData.entries()) {
         if (value === "") continue;
         if (key === "file-input") continue;
-        data[key] = value;
+        dataVals[key] = value;
     }
 
     let images = formData.getAll("file-input") as File[];
 
-    const postResponse = await fetch(import.meta.env.API_URL + "/telefony", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Prefer: "return=representation",
-            apikey: import.meta.env.API_KEY,
-        },
-        body: JSON.stringify(data),
-    });
+    const { data, error } = await supabase
+        .from("telefony")
+        .insert(dataVals)
+        .select("id");
 
-    const responseData = await postResponse.json();
-    const id = responseData[0]["id"];
+    let id = 0;
+    if (error) console.error(error);
+    if (!data) console.log("Null id");
+    else id = data[0].id;
 
-    if (postResponse.ok && images.length > 0) {
+    if (!error && images.length > 0) {
         for (const image of images) {
-            const postFileResponse = await fetch(
-                "https://bulngrtrwzotkyasnwml.supabase.co/storage/v1/object/images/telefony/" +
-                    id +
-                    "/" +
-                    image.name,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: "Bearer " + import.meta.env.BEARER_TOKEN,
-                    },
-                    body: image,
-                }
-            );
-            const data = await postFileResponse.json();
-            console.log(data);
+            const { data: uploadData, error: uploadError } =
+                await supabase.storage
+                    .from("images")
+                    .upload("telefony/" + id + "/" + image.name, image, {
+                        cacheControl: "public, max-age=31536000",
+                        upsert: false,
+                    });
+
+            if (error) console.error(error);
         }
     }
 }

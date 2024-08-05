@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import FullPhoneEntry from "../components/FullPhoneEntry";
+import { supabase } from "./../utils/supabase";
 
 interface PhoneData {
     id: number;
@@ -25,39 +26,51 @@ interface PhoneData {
 }
 
 const params = Astro.url.searchParams;
-const id = params.get('id');
+const id = params.get("id");
 
-const response = await fetch(import.meta.env.API_URL + "/telefony?id=eq." + id, {
-    headers: {
-        apikey: import.meta.env.API_KEY,
-    },
+const { data: pData, error: phoneError } = await supabase
+    .from("telefony")
+    .select()
+    .eq("id", id);
+const phoneData = pData as PhoneData[];
+if (phoneError) console.error(phoneError);
+
+const { data: imageNamesFetch, error: imagesError } = await supabase.storage
+    .from("images")
+    .list("telefony/" + id);
+
+if (imagesError) console.error(imagesError);
+const imageNames = imageNamesFetch?.map((image) => image.name) || [];
+
+const imageUrls = imageNames?.map((imageName) => {
+    const { data: image } = supabase.storage
+        .from("images")
+        .getPublicUrl(`telefony/${id}/${imageName}`);
+    return image.publicUrl;
 });
-
-const data = await response.json();
-
-const image = await fetch("https://bulngrtrwzotkyasnwml.supabase.co/functions/v1/get-images?id=eq." + id, {
-    headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1bG5ncnRyd3pvdGt5YXNud21sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEzOTMxMDcsImV4cCI6MjAyNjk2OTEwN30.5rlOWe79b8gNHPHet3L6Le56XFU27hX_yG5BfoNdK00'
-    },
-});
-
-const imageData = image;
-console.log(imageData);
 ---
+
 <Layout title="Atari muzeum">
     <div class="flex justify-center flex-row min-h-full">
         <div class="flex flex-col w-1/6 min-w-60 p-4">
             <div
-            class="flex flex-row w-full gap-4 flex-wrap h-full 2xl:justify-center"
-        >
+                class="flex flex-row w-full gap-4 flex-wrap h-full 2xl:justify-center"
+            >
+                {
+                    phoneData &&
+                        phoneData.map((item: PhoneData) => {
+                            return <FullPhoneEntry data={item} />;
+                        })
+                }
+            </div>
             {
-                data &&
-                    data.map((item: PhoneData) => {
-                        return <FullPhoneEntry data={item} />;
+                imageUrls &&
+                    imageUrls.map((url) => {
+                        return (
+                            <img src={url} alt="image" class="w-1/2 h-1/2" />
+                        );
                     })
             }
-            <img src={imageData} alt="phone" class="w-1/2 h-1/2" />
-        </div>
         </div>
     </div>
 </Layout>
