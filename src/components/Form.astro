@@ -2,88 +2,69 @@
 import React from "react";
 import FlagPicker from "../components/FlagPicker.astro";
 
-if (Astro.request.method === "POST"){
+if (Astro.request.method === "POST") {
     const formData = await Astro.request.formData();
-    console.log(formData);
-    const producent = formData.get("producent");
-    const model = formData.get("model");
-    const oznaczenie = formData.get("oznaczenie");
-    const kolor = formData.get("kolor");
-    const sprawny = formData.get("sprawny");
-    const stan = formData.get("stan");
-    const numer_seryjny = formData.get("numer_seryjny");
-    const kraj = formData.get("kraj");
-    const jezyk = formData.get("jezyk");
-    const simlock = formData.get("simlock");
-    const uwagi = formData.get("uwagi");
-    const opakowanie = formData.get("opakowanie");
-    const rok_produkcji = formData.get("rok_produkcji");
-    const zdarzenie = formData.get("zdarzenie");
-    const model_baterii = formData.get("model_baterii");
-    const made = formData.get("made");
-    const life_timer = formData.get("life_timer");
-    const posiadany = formData.get("posiadany");
-    const files = formData.getAll("file-input");
-    console.log(files);
+
+    let data: { [key: string]: any } = {};
+    for (const [key, value] of formData.entries()) {
+        if (value === "") continue;
+        if (key === "file-input") continue;
+        data[key] = value;
+    }
+
+    let images = formData.getAll("file-input") as File[];
 
     const postResponse = await fetch(import.meta.env.API_URL + "/telefony", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Prefer": "return=representation",
+            Prefer: "return=representation",
             apikey: import.meta.env.API_KEY,
         },
-        body: JSON.stringify({
-            producent: producent,
-            model: model,
-            oznaczenie: oznaczenie,
-            kolor: kolor,
-            sprawny: sprawny,
-            stan: stan,
-            numer_seryjny: numer_seryjny,
-            kraj: kraj,
-            jezyk: jezyk,
-            simlock: simlock,
-            uwagi: uwagi,
-            opakowanie: opakowanie,
-            rok_produkcji: (made === "" ? null : rok_produkcji),
-            zdarzenie: zdarzenie,
-            model_baterii: model_baterii,
-            made: (made === "" ? null : made),
-            life_timer: (life_timer === "" ? null : life_timer),
-            posiadany: posiadany
-        }),
+        body: JSON.stringify(data),
     });
-    
+
     const responseData = await postResponse.json();
-    const id = responseData[0].id;
-    
-    if (postResponse.ok && files.length > 0) {
-        const formData = new FormData();
-        formData.append('file', files[0]);
-        //const bodyContent  = files.length === 1 ? { file: files[0] } : { files: files };
-        const postFileResponse = await fetch("https://bulngrtrwzotkyasnwml.supabase.co/functions/v1/upload-image?id=eq." + id, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1bG5ncnRyd3pvdGt5YXNud21sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEzOTMxMDcsImV4cCI6MjAyNjk2OTEwN30.5rlOWe79b8gNHPHet3L6Le56XFU27hX_yG5BfoNdK00'
-            },
-            body: formData,
-        });
-        const data = postFileResponse;
-        console.log(data);
+    const id = responseData[0]["id"];
+
+    if (postResponse.ok && images.length > 0) {
+        for (const image of images) {
+            const postFileResponse = await fetch(
+                "https://bulngrtrwzotkyasnwml.supabase.co/storage/v1/object/images/telefony/" +
+                    id +
+                    "/" +
+                    image.name,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: "Bearer " + import.meta.env.BEARER_TOKEN,
+                    },
+                    body: image,
+                }
+            );
+            const data = await postFileResponse.json();
+            console.log(data);
+        }
     }
 }
 ---
 
-<form method="POST" class="w-full">
+<form method="POST" class="w-full" enctype="multipart/form-data">
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="producent">Producent:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="producent">Producent:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" id="producent" name="producent" />
+                <input
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    type="text"
+                    id="producent"
+                    name="producent"
+                />
             </div>
         </div>
     </div>
@@ -91,10 +72,18 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="model">Model:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="model">Model:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" id="model" name="model" />
+                <input
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    type="text"
+                    id="model"
+                    name="model"
+                />
             </div>
         </div>
     </div>
@@ -102,10 +91,18 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="oznaczenie">Oznaczenie:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="oznaczenie">Oznaczenie:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" id="oznaczenie" name="oznaczenie" />
+                <input
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    type="text"
+                    id="oznaczenie"
+                    name="oznaczenie"
+                />
             </div>
         </div>
     </div>
@@ -113,10 +110,18 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="kolor">Kolor:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="kolor">Kolor:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" id="kolor" name="kolor" />
+                <input
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    type="text"
+                    id="kolor"
+                    name="kolor"
+                />
             </div>
         </div>
     </div>
@@ -125,7 +130,13 @@ if (Astro.request.method === "POST"){
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3"></div>
             <label class="md:w-2/3 block font-bold">
-                <input class="mr-2 leading-tight" type="checkbox" name="sprawny" value="1" checked>
+                <input
+                    class="mr-2 leading-tight"
+                    type="checkbox"
+                    name="sprawny"
+                    value="1"
+                    checked
+                />
                 <span class="text-sm">Sprawny</span>
             </label>
         </div>
@@ -134,10 +145,18 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="stan">Stan:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="stan">Stan:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" id="stan" name="stan" />
+                <input
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    type="text"
+                    id="stan"
+                    name="stan"
+                />
             </div>
         </div>
     </div>
@@ -145,10 +164,18 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="numer_seryjny">Numer seryjny:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="numer_seryjny">Numer seryjny:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" id="numer_seryjny" name="numer_seryjny" />
+                <input
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    type="text"
+                    id="numer_seryjny"
+                    name="numer_seryjny"
+                />
             </div>
         </div>
     </div>
@@ -156,7 +183,9 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="kraj">Kraj:</label>
+                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    >Kraj:</label
+                >
             </div>
             <div class="md:w-2/3">
                 <FlagPicker />
@@ -167,10 +196,18 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="jezyk">Język:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="jezyk">Język:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" id="jezyk" name="jezyk" />
+                <input
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    type="text"
+                    id="jezyk"
+                    name="jezyk"
+                />
             </div>
         </div>
     </div>
@@ -178,10 +215,18 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="simlock">Simlock:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="simlock">Simlock:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" id="simlock" name="simlock" />
+                <input
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    type="text"
+                    id="simlock"
+                    name="simlock"
+                />
             </div>
         </div>
     </div>
@@ -189,10 +234,16 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="uwagi">Uwagi:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="uwagi">Uwagi:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <textarea class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="uwagi" name="uwagi"></textarea>
+                <textarea
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    id="uwagi"
+                    name="uwagi"></textarea>
             </div>
         </div>
     </div>
@@ -201,7 +252,13 @@ if (Astro.request.method === "POST"){
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3"></div>
             <label class="md:w-2/3 block font-bold">
-                <input class="mr-2 leading-tight" type="checkbox" name="opakowanie" value="1" checked>
+                <input
+                    class="mr-2 leading-tight"
+                    type="checkbox"
+                    name="opakowanie"
+                    value="1"
+                    checked
+                />
                 <span class="text-sm">Opakowanie</span>
             </label>
         </div>
@@ -210,10 +267,18 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="rok_produkcji">Rok produkcji:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="rok_produkcji">Rok produkcji:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" id="rok_produkcji" name="rok_produkcji" />
+                <input
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    type="text"
+                    id="rok_produkcji"
+                    name="rok_produkcji"
+                />
             </div>
         </div>
     </div>
@@ -221,10 +286,18 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="zdarzenie">Zdarzenie:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="zdarzenie">Zdarzenie:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" id="zdarzenie" name="zdarzenie" />
+                <input
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    type="text"
+                    id="zdarzenie"
+                    name="zdarzenie"
+                />
             </div>
         </div>
     </div>
@@ -232,10 +305,18 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="model_baterii">Model baterii:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="model_baterii">Model baterii:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" id="model_baterii" name="model_baterii" />
+                <input
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    type="text"
+                    id="model_baterii"
+                    name="model_baterii"
+                />
             </div>
         </div>
     </div>
@@ -243,10 +324,18 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="made">Made:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="made">Made:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" id="made" name="made" />
+                <input
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    type="text"
+                    id="made"
+                    name="made"
+                />
             </div>
         </div>
     </div>
@@ -254,19 +343,33 @@ if (Astro.request.method === "POST"){
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3">
-                <label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="life_timer">Life timer:</label>
+                <label
+                    class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
+                    for="life_timer">Life timer:</label
+                >
             </div>
             <div class="md:w-2/3">
-                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" id="life_timer" name="life_timer" />
+                <input
+                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    type="text"
+                    id="life_timer"
+                    name="life_timer"
+                />
             </div>
         </div>
     </div>
-    
+
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3"></div>
             <label class="md:w-2/3 block font-bold">
-                <input class="mr-2 leading-tight" type="checkbox" name="posiadany" value="1" checked>
+                <input
+                    class="mr-2 leading-tight"
+                    type="checkbox"
+                    name="posiadany"
+                    value="1"
+                    checked
+                />
                 <span class="text-sm">Posiadany</span>
             </label>
         </div>
@@ -276,15 +379,22 @@ if (Astro.request.method === "POST"){
         <div class="flex flex-col md:flex-row md:items-center">
             <div class="md:w-1/3"></div>
             <label class="md:w-2/3 block font-bold"></label>
-                <input type="file" id="file-input" name="file-input" multiple accept="image/png, image/jpeg, image/gif, image/bmp, image/webp, image/tiff, image/svg+xml, image/x-icon"/>
-            </label>
+            <input
+                type="file"
+                id="file-input"
+                name="file-input"
+                multiple
+                accept="image/png, image/jpeg, image/gif, image/bmp, image/webp, image/tiff, image/svg+xml, image/x-icon"
+            />
         </div>
     </div>
-
     <div class="md:flex md:items-center">
         <div class="md:w-1/3"></div>
         <div class="md:w-2/3">
-            <button class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="submit">
+            <button
+                class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                onclick="submit"
+            >
                 Dodaj
             </button>
         </div>
