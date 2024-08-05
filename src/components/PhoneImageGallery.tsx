@@ -20,7 +20,7 @@ function SingleImage({ imageUrl }: { imageUrl: string }) {
 
     return (
         <>
-            <img src={imageUrl} alt='image' className='max-h-72 w-auto' onClick={()=>{setIsFullPage(true)}}/>
+            <img src={imageUrl} alt='image' className='max-h-80 w-auto border-[3px] border-black' onClick={()=>{setIsFullPage(true)}}/>
             {isFullPage && 
                 <div className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-90 z-50 flex justify-center items-center' onClick={()=>{setIsFullPage(false)}}>
                     <img src={imageUrl} alt='image' className='max-h-[90%] w-auto'/>
