@@ -35,12 +35,12 @@ if (Astro.request.method === "POST") {
                         upsert: false,
                     });
 
-            if (error) console.error(error);
+            if (uploadError) console.error(uploadError);
         }
     }
 
-    console.log("Redirecting to /description?id=" + id);
-    return Astro.redirect("/description?id=" + id);
+    // console.log("Redirecting to /description?id=" + id);
+    return Astro.redirect("/phoneDetails?id=" + id);
 }
 ---
 
@@ -286,7 +286,7 @@ if (Astro.request.method === "POST") {
                             <div class="md:w-2/3">
                                 <input
                                     class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                                    type="text"
+                                    type="date"
                                     id="rok_produkcji"
                                     name="rok_produkcji"
                                 />

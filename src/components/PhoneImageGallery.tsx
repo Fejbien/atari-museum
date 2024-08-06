@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 function PhoneImageGallery({ imageUrls }: { imageUrls: string[] }) {
     return (
-        <div className="flex flex-wrap w-3/4 m-4 gap-4">
+        <div className="flex flex-row flex-wrap content-start w-full m-4 gap-4">
             {
                 imageUrls &&
                     imageUrls.map((url, id) => {
