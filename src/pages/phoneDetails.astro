@@ -1,0 +1,159 @@
+---
+import PhoneImageGallery from "../components/PhoneImageGallery";
+import binIcon from "../assets/binIcon.svg";
+import Layout from "../layouts/Layout.astro";
+import { supabase } from "../utils/supabase";
+
+interface PhoneData {
+    id: number;
+    producent: string;
+    model: string;
+    oznaczenie: string;
+    kolor: string;
+    sprawny: boolean;
+    stan: string;
+    numer_seryjny: string;
+    kraj: string;
+    jezyk: string;
+    simlock: string;
+    uwagi: string;
+    opakowanie: boolean;
+    rok_produkcji: Date;
+    zdarzenie: string;
+    model_baterii: string;
+    made: Date;
+    life_timer: string;
+    posiadany: boolean;
+}
+
+const params = Astro.url.searchParams;
+const id = params.get("id");
+
+const { data: pData, error: phoneError } = await supabase
+    .from("telefony")
+    .select()
+    .eq("id", id);
+
+if (phoneError) console.error(phoneError);
+
+const phoneData = pData as PhoneData[];
+const data = phoneData[0];
+
+const { data: imageNamesFetch, error: imagesError } = await supabase.storage
+    .from("images")
+    .list("telefony/" + id);
+
+if (imagesError) console.error(imagesError);
+
+const imageNames = imageNamesFetch?.map((image: any) => image.name) || [];
+
+const imageUrls = imageNames?.map((imageName: string) => {
+    const { data: image } = supabase.storage
+        .from("images")
+        .getPublicUrl(`telefony/${id}/${imageName}`);
+    return image.publicUrl;
+});
+
+//TODO:
+// - add "remove"  button with a confirmation dialog
+---
+
+<Layout title="Atari muzeum">
+    <div class="flex flex-row min-h-full justify-center w-full">
+        <div
+            class="bg-white border-[3px] border-black flex flex-col m-4 min-w-80 w-auto max-w-96 h-full"
+        >
+            <div
+                class="bg-mainBgDark text-lg p-2 font-bold font-pixeledFont flex flex-row justify-between items-center"
+            >
+                <h1 class="text-2xl">{data.producent} {data.model}</h1>
+                <div class="flex flex-row">
+                    <img src={binIcon.src} class="w-6 h-6 hover:scale-110" />
+                </div>
+            </div>
+            <div
+                class="flex flex-col [&>*:nth-child(odd)]:bg-slate-200 [&>*:nth-child(even)]:bg-slate-300"
+            >
+                <p class="p-2"><span class="font-bold">id:</span> {data.id}</p>
+                <p class="p-2">
+                    <span class="font-bold">producent:</span>
+                    {data.producent}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">model:</span>
+                    {data.model}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">oznaczenie:</span>
+                    {data.oznaczenie}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">kolor:</span>
+                    {data.kolor}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">sprawny:</span>
+                    {data.sprawny ? "tak" : "nie"}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">stan:</span>
+                    {data.stan}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">numer seryjny:</span>
+                    {data.numer_seryjny}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">kraj:</span>
+                    {data.kraj}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">jezyk:</span>
+                    {data.jezyk}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">simlock:</span>
+                    {data.simlock}
+                </p>
+                <p class="p-2 text-wrap">
+                    <span class="font-bold">uwagi:</span>
+                    {data.uwagi}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">opakowanie:</span>
+                    {data.opakowanie ? "tak" : "nie"}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">rok produkcji:</span>
+                    {data.rok_produkcji ? data.rok_produkcji.toString() : "N/A"}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">zdarzenie:</span>
+                    {data.zdarzenie}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">model baterii:</span>
+                    {data.model_baterii}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">made:</span>
+                    {data.made ? data.made.toString() : "N/A"}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold">life_timer:</span>
+                    {data.life_timer}
+                </p>
+                <p class="p-2">
+                    <span class="font-bold"> posiadany:</span>
+                    {data.posiadany ? "tak" : "nie"}
+                </p>
+                <p class="p-2 text-wrap">
+                    <span class="text-red-800 font-bold">uwagi:</span>
+                    {data.uwagi}
+                </p>
+            </div>
+        </div>
+
+        <PhoneImageGallery imageUrls={imageUrls} client:only="react" />
+    </div>
+</Layout>
