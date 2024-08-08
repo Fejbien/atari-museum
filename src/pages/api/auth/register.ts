@@ -3,6 +3,7 @@ import { supabase } from "../../../utils/supabase";
 
 export const POST: APIRoute = async ({ request, redirect }) => {
     const formData = await request.formData();
+    console.log(formData);
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
 
@@ -19,5 +20,6 @@ export const POST: APIRoute = async ({ request, redirect }) => {
         return new Response(error.message, { status: 500 });
     }
 
-    return redirect("/signin");
+    return new Response("User created successfully", { status: 200 });
+    // return redirect("/signin");
 };

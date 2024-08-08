@@ -40,11 +40,11 @@ const show = !(Astro.url.pathname === "/signin" || Astro.url.pathname === "/regi
     <div class="flex flex-row mr-2">
         {
             show && (email === "Unknown" ? (
-                <a href="/signin" class="font-pixeledFont text-xl">Sign in</a>
+                <a href="/signin" class="font-pixeledFont text-xl">Zaloguj</a>
             ) : (
                 
                 <p class="pr-8 font-pixeledFont text-xl">{email}</p>
-                <a href="/api/auth/signout" class="font-pixeledFont text-xl">Sign out</a>
+                <a href="/api/auth/signout" class="font-pixeledFont text-xl">Wyloguj</a>
             ))
         }
     </div>
