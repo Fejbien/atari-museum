@@ -1,0 +1,52 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// TODO:
+// - Handle case where email is already taken
+// - Handle case where password is not valid
+---
+
+<Layout title="Rejestracja">
+    <div class="flex flex-row w-full h-full justify-center">
+        <div
+            class="mt-10 bg-white border-[3px] border-black p-6 flex flex-col justify-center items-center"
+        >
+            <h1 class="text-3xl font-bold">Rejestracja</h1>
+            <p class="text-xl">
+                Masz juz konto? <a
+                    href="/signin"
+                    class="text-blue-600 underline font-bold hover:text-blue-800 hover:no-underline"
+                    >Zaloguj</a
+                >
+            </p>
+            <form
+                action="/api/auth/register"
+                method="post"
+                class="flex flex-col p-2"
+            >
+                <label for="email">Email:</label>
+                <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    class="min-w-96 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                />
+                <div class="m-2"></div>
+                <label for="password">Hasło:</label>
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    class="min-w-96 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                />
+                <div class="w-full flex justify-center mt-4">
+                    <button
+                        type="submit"
+                        class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded w-3/4"
+                        >Zarejestruj</button
+                    >
+                </div>
+            </form>
+        </div>
+    </div>
+</Layout>

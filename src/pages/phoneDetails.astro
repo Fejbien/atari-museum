@@ -1,10 +1,16 @@
 ---
 import PhoneImageGallery from "../components/PhoneImageGallery";
-import binIcon from "../assets/binIcon.svg";
 import Layout from "../layouts/Layout.astro";
 import { supabase } from "../utils/supabase";
 import type { PhoneData } from "../utils/interface/PhoneData";
 import PhoneDeletion from "../components/PhoneDeletionButton";
+
+const { cookies, redirect } = Astro;
+
+const accessToken = cookies.get("accessToken");
+const refreshToken = cookies.get("refreshToken");
+
+const isLogged = accessToken && refreshToken;
 
 const params = Astro.url.searchParams;
 const id = params.get("id");
@@ -17,8 +23,7 @@ const { data: pData, error: phoneError } = await supabase
 if (phoneError) console.error(phoneError);
 if (pData?.length == 0) {
     console.error("No data found for id: " + id);
-    // TODO: Later change it to phone site itself
-    return Astro.redirect("/");
+    return Astro.redirect("/phones");
 }
 
 const phoneData = pData as PhoneData[];
@@ -49,9 +54,13 @@ const imageUrls = imageNames?.map((imageName: string) => {
                 class="bg-mainBgDark text-lg p-2 font-bold font-pixeledFont flex flex-row justify-between items-center"
             >
                 <h1 class="text-2xl">{data.producent} {data.model}</h1>
-                <div class="flex flex-row p-0 m-0 justify-center items-center">
-                    <PhoneDeletion id={data.id} client:load />
-                </div>
+                {
+                    isLogged && (
+                        <div class="flex flex-row p-0 m-0 justify-center items-center">
+                            <PhoneDeletion id={data.id} client:load />
+                        </div>
+                    )
+                }
             </div>
             <div
                 class="flex flex-col [&>*:nth-child(odd)]:bg-slate-200 [&>*:nth-child(even)]:bg-slate-300"

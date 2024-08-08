@@ -1,0 +1,46 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PhoneEntry from "../components/PhoneEntry";
+import { supabase } from "./../utils/supabase";
+import type { PhoneData } from "../utils/interface/PhoneData";
+
+const { data, error } = await supabase.from("telefony").select();
+
+if (error) console.error(error);
+
+const { cookies, redirect } = Astro;
+
+const accessToken = cookies.get("accessToken");
+const refreshToken = cookies.get("refreshToken");
+
+const isLogged = accessToken && refreshToken;
+---
+
+<Layout title="Atari muzeum Telefony">
+    <div class="flex justify-center flex-row min-h-full">
+        <div class="flex flex-col w-1/6 min-w-60 p-4">
+            <h1 class="text-3xl font-bold">Telefony</h1>
+            <p class="text-lg">filtrowankoi tu bedzie</p>
+        </div>
+        <div
+            class="flex flex-row w-full gap-4 flex-wrap h-full 2xl:justify-center"
+        >
+            {
+                data &&
+                    data.map((item: PhoneData) => {
+                        return <PhoneEntry data={item} />;
+                    })
+            }
+        </div>
+    </div>
+    {
+        isLogged && (
+            <a
+                href="/addPhone"
+                class="fixed bottom-4 right-4 bg-blue-500 text-white p-2 rounded"
+            >
+                Dodaj telefon
+            </a>
+        )
+    }
+</Layout>

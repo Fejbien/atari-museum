@@ -1,7 +1,51 @@
+---
+import { supabase } from "../utils/supabase";
+
+const { cookies, redirect } = Astro;
+
+const accessToken = cookies.get("accessToken");
+const refreshToken = cookies.get("refreshToken");
+
+let email = "Unknown";
+if (accessToken && refreshToken) {
+    const { data, error } = await supabase.auth.setSession({
+        refresh_token: refreshToken.value,
+        access_token: accessToken.value,
+    });
+
+    if (error) {
+        cookies.delete("accessToken", {
+            path: "/",
+        });
+        cookies.delete("refreshToken", {
+            path: "/",
+        });
+
+        return redirect("/signin");
+    }
+
+    email = data?.user?.email || "Unknown";
+}
+
+// Show header signin text only if not on signin or register page
+const show = !(Astro.url.pathname === "/signin" || Astro.url.pathname === "/register");
+---
+
 <div
     class="w-full h-auto bg-white pt-1 pl-2 pb-1 border-b-black border-b-[3px] flex flex-row items-center justify-between"
 >
     <h1 class="font-pixeledFont text-2xl font-bold">
         <a href="/">ATARI Muzeum</a>
     </h1>
+    <div class="flex flex-row mr-2">
+        {
+            show && (email === "Unknown" ? (
+                <a href="/signin" class="font-pixeledFont text-xl">Sign in</a>
+            ) : (
+                
+                <p class="pr-8 font-pixeledFont text-xl">{email}</p>
+                <a href="/api/auth/signout" class="font-pixeledFont text-xl">Sign out</a>
+            ))
+        }
+    </div>
 </div>

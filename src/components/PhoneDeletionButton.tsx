@@ -19,10 +19,14 @@ function DeletionButton({id}: {id: number}) {
                 if (res.ok) {
                     window.alert('Phone entry deleted successfully (redirect in 2s)');
                     setTimeout(function() {
-                        // TODO: Redirect to phone page itself
-                        window.location.replace('/');
+                        window.location.replace('/phones');
                     }, 2000);
-                } else {
+                }
+                else if (res.status === 401) {
+                    window.alert('Unauthorized');
+                    window.location.replace('/signin');
+                }
+                else {
                     console.error('Error deleting phone entry:', res.statusText);
                 }
             }).catch((err) => {
