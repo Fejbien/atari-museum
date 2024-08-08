@@ -46,7 +46,7 @@ const imageUrls = imageNames?.map((imageName: string) => {
 ---
 
 <Layout title="Atari muzeum">
-    <div class="flex flex-row min-h-full justify-center w-full">
+    <div class="flex flex-row min-h-full justify-center w-full h-[92dvh]">
         <div
             class="bg-white border-[3px] border-black flex flex-col m-4 min-w-80 w-auto max-w-96 h-full"
         >
@@ -63,7 +63,7 @@ const imageUrls = imageNames?.map((imageName: string) => {
                 }
             </div>
             <div
-                class="flex flex-col [&>*:nth-child(odd)]:bg-slate-200 [&>*:nth-child(even)]:bg-slate-300"
+                class="flex flex-col [&>*:nth-child(odd)]:bg-slate-200 [&>*:nth-child(even)]:bg-slate-300 overflow-y-scroll"
             >
                 <p class="p-2"><span class="font-bold">id:</span> {data.id}</p>
                 <p class="p-2">
@@ -145,6 +145,10 @@ const imageUrls = imageNames?.map((imageName: string) => {
             </div>
         </div>
 
-        <PhoneImageGallery imageUrls={imageUrls} client:only="react" />
+        <div
+            class="h-[92dvh] w-full flex flex-row flex-wrap gap-4 m-4 mr-0 overflow-y-scroll"
+        >
+            <PhoneImageGallery imageUrls={imageUrls} client:only="react" />
+        </div>
     </div>
 </Layout>

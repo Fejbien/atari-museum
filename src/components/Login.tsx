@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
-function RegisterUI() {
+function LoginUI() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        console.log("submit");
         const formData = new FormData(e.target as HTMLFormElement);
 
         let dataVals: { [key: string]: any } = {};
@@ -13,7 +14,7 @@ function RegisterUI() {
             dataVals[key] = value;
         }
 
-        const response = await fetch("/api/auth/register", {
+        const response = await fetch("/api/auth/signin", {
             method: "POST",
             body: new URLSearchParams(dataVals),
             headers: {
@@ -22,18 +23,16 @@ function RegisterUI() {
         });
 
         if (response.ok) {
-            window.location.replace("/signin");
+            window.location.replace("/");
         } else {
             const errorDetails = await response.text();
+            console.log(errorDetails);
             switch (errorDetails) {
                 case "Email and password are required":
                     setErrorMessage("Email i hasło są wymagane");
                     break;
-                case "Email already in use":
-                    setErrorMessage("Email jest już w użyciu");
-                    break;
-                case "User already registered":
-                    setErrorMessage("Użytkownik już zarejestrowany");
+                case "Invalid login credentials":
+                    setErrorMessage("Nieprawidłowe dane logowania");
                     break;
                 default:
                     setErrorMessage("Wystąpił błąd");
@@ -44,14 +43,14 @@ function RegisterUI() {
 
     return (
         <div className="mt-10 bg-white border-[3px] border-black p-6 flex flex-col justify-center items-center">
-            <h1 className="text-6xl font-pixeledFont">Rejestracja</h1>
+            <h1 className="text-6xl font-pixeledFont">Zaloguj sie</h1>
             <p className="text-xl">
-                Masz juz konto?{" "}
+                Nowy tutaj?{" "}
                 <a
-                    href="/signin"
+                    href="/register"
                     className="text-blue-600 underline font-bold hover:text-blue-800 hover:no-underline"
                 >
-                    Zaloguj
+                    Utworz konto
                 </a>
             </p>
             {errorMessage && (
@@ -82,7 +81,7 @@ function RegisterUI() {
                         type="submit"
                         className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded w-3/4"
                     >
-                        Zarejestruj
+                        Login
                     </button>
                 </div>
             </form>
@@ -90,4 +89,4 @@ function RegisterUI() {
     );
 }
 
-export default RegisterUI;
+export default LoginUI;

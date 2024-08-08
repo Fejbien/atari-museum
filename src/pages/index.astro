@@ -1,9 +1,21 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import SubPagesRenderer from "../components/SubPagesRenderer";
 ---
 
 <Layout title="Atari muzeum">
-    <div>
-        <a href="/phones">Zobacz telefony</a>
+    <div class="w-full h-full flex flex-col">
+        <div class="w-full p-4">
+            <div class="w-full bg-white border-[3px] border-black">
+                <h1 class="p-4 text-6xl font-pixeledFont">
+                    Witaj w Atari muzeum
+                </h1>
+                <p class="p-4 text-3xl">
+                    W naszym muzeum znajdziesz wszystko co związane z Atari. Od
+                    telefonów, przez akcesoria, po literaturę i statystyki.
+                </p>
+            </div>
+        </div>
+        <div class="subsites"><SubPagesRenderer /></div>
     </div>
 </Layout>

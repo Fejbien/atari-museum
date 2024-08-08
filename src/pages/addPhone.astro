@@ -134,6 +134,25 @@ if (Astro.request.method === "POST") {
                                     class="block font-bold md:text-right mb-1 md:mb-0 pr-4"
                                     for="kolor">Kolor:</label
                                 >
+                                <datalist id="colours">
+                                    <option value="Czarny">Czarny</option>
+                                    <option value="Biały">Biały</option>
+                                    <option value="Srebrny">Srebrny</option>
+                                    <option value="Złoty">Złoty</option>
+                                    <option value="Niebieski">Niebieski</option>
+                                    <option value="Czerwony">Czerwony</option>
+                                    <option value="Różowy">Różowy</option>
+                                    <option value="Zielony">Zielony</option>
+                                    <option value="Żółty">Żółty</option>
+                                    <option value="Pomarańczowy"
+                                        >Pomarańczowy</option
+                                    >
+                                    <option value="Fioletowy">Fioletowy</option>
+                                    <option value="Brązowy">Brązowy</option>
+                                    <option value="Szary">Szary</option>
+                                    <option value="Beżowy">Beżowy</option>
+                                    <option value="Inny">Inny</option>
+                                </datalist>
                             </div>
                             <div class="md:w-2/3">
                                 <input
@@ -141,6 +160,7 @@ if (Astro.request.method === "POST") {
                                     type="text"
                                     id="kolor"
                                     name="kolor"
+                                    list="colours"
                                 />
                             </div>
                         </div>
