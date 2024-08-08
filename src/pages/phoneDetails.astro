@@ -3,28 +3,8 @@ import PhoneImageGallery from "../components/PhoneImageGallery";
 import binIcon from "../assets/binIcon.svg";
 import Layout from "../layouts/Layout.astro";
 import { supabase } from "../utils/supabase";
-
-interface PhoneData {
-    id: number;
-    producent: string;
-    model: string;
-    oznaczenie: string;
-    kolor: string;
-    sprawny: boolean;
-    stan: string;
-    numer_seryjny: string;
-    kraj: string;
-    jezyk: string;
-    simlock: string;
-    uwagi: string;
-    opakowanie: boolean;
-    rok_produkcji: Date;
-    zdarzenie: string;
-    model_baterii: string;
-    made: Date;
-    life_timer: string;
-    posiadany: boolean;
-}
+import type { PhoneData } from "../utils/interface/PhoneData";
+import PhoneDeletion from "../components/PhoneDeletionButton";
 
 const params = Astro.url.searchParams;
 const id = params.get("id");
@@ -35,6 +15,11 @@ const { data: pData, error: phoneError } = await supabase
     .eq("id", id);
 
 if (phoneError) console.error(phoneError);
+if (pData?.length == 0) {
+    console.error("No data found for id: " + id);
+    // TODO: Later change it to phone site itself
+    return Astro.redirect("/");
+}
 
 const phoneData = pData as PhoneData[];
 const data = phoneData[0];
@@ -53,9 +38,6 @@ const imageUrls = imageNames?.map((imageName: string) => {
         .getPublicUrl(`telefony/${id}/${imageName}`);
     return image.publicUrl;
 });
-
-//TODO:
-// - add "remove"  button with a confirmation dialog
 ---
 
 <Layout title="Atari muzeum">
@@ -67,8 +49,8 @@ const imageUrls = imageNames?.map((imageName: string) => {
                 class="bg-mainBgDark text-lg p-2 font-bold font-pixeledFont flex flex-row justify-between items-center"
             >
                 <h1 class="text-2xl">{data.producent} {data.model}</h1>
-                <div class="flex flex-row">
-                    <img src={binIcon.src} class="w-6 h-6 hover:scale-110" />
+                <div class="flex flex-row p-0 m-0 justify-center items-center">
+                    <PhoneDeletion id={data.id} client:load />
                 </div>
             </div>
             <div
