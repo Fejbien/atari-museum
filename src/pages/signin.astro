@@ -9,6 +9,9 @@ const refreshToken = cookies.get("refreshToken");
 if (accessToken && refreshToken) {
     return redirect("/");
 }
+
+// TODO:
+// - Add error handling on client side using react
 ---
 
 <Layout title="Logowanie">
