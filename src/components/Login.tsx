@@ -42,7 +42,7 @@ function LoginUI() {
     };
 
     return (
-        <div className="mt-10 bg-white border-[3px] border-black p-6 flex flex-col justify-center items-center">
+        <div className="mt-10 bg-white border-[3px] border-black p-10 flex flex-col justify-center items-center h-fit">
             <h1 className="text-6xl font-pixeledFont">Zaloguj sie</h1>
             <p className="text-xl">
                 Nowy tutaj?{" "}
