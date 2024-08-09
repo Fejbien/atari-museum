@@ -1,0 +1,14 @@
+---
+import Layout from "../layouts/Layout.astro";
+import RegisterUI from "../components/Register";
+
+// TODO:
+// - Handle case where email is already taken
+// - Handle case where password is not valid
+---
+
+<Layout title="Rejestracja">
+    <div class="flex flex-row w-full h-full justify-center">
+        <RegisterUI client:load />
+    </div>
+</Layout>
