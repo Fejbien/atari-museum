@@ -1,0 +1,193 @@
+---
+const { passedValue } = Astro.props;
+---
+
+<select class="w-full" name="kraj" class="w-full px-3 py-2 border border-gray-300 rounded">
+    <option disabled selected> -- Wybierz kraj -- </option>
+    <option value='US' selected={ passedValue === "US" ? true : false } >🇺🇸 Stany Zjednoczone</option>
+    <option value='GB' selected={ passedValue === "GB" ? true : false }>🇬🇧 Wielka Brytania</option>
+    <option value="PL" selected={ passedValue === "PL" ? true : false }>🇵🇱 Polska</option>
+    <option value="FL" selected={ passedValue === "FL" ? true : false }>🇫🇮 Finlandia</option>
+    <option style="font-size: 1pt; background-color: #000000;" disabled>&nbsp;</option>
+    <option value="AF" selected={ passedValue === "AF" ? true : false }>🇦🇫 Afganistan</option>
+    <option value="AL" selected={ passedValue === "AL" ? true : false }>🇦🇱 Albania</option>
+    <option value="DZ" selected={ passedValue === "DZ" ? true : false }>🇩🇿 Algieria</option>
+    <option value="AD" selected={ passedValue === "AD" ? true : false }>🇦🇩 Andora</option>
+    <option value="AO" selected={ passedValue === "AO" ? true : false }>🇦🇴 Angola</option>
+    <option value="AG" selected={ passedValue === "AG" ? true : false }>🇦🇬 Antigua i Barbuda</option>
+    <option value="AR" selected={ passedValue === "AR" ? true : false }>🇦🇷 Argentyna</option>
+    <option value="AM" selected={ passedValue === "AM" ? true : false }>🇦🇲 Armenia</option>
+    <option value="AU" selected={ passedValue === "AU" ? true : false }>🇦🇺 Australia</option>
+    <option value="AT" selected={ passedValue === "AT" ? true : false }>🇦🇹 Austria</option>
+    <option value="AZ" selected={ passedValue === "AZ" ? true : false }>🇦🇿 Azerbejdżan</option>
+    <option value="BS" selected={ passedValue === "BS" ? true : false }>🇧🇸 Bahamy</option>
+    <option value="BH" selected={ passedValue === "BH" ? true : false }>🇧🇭 Bahrajn</option>
+    <option value="BD" selected={ passedValue === "BD" ? true : false }>🇧🇩 Bangladesz</option>
+    <option value="BB" selected={ passedValue === "BB" ? true : false }>🇧🇧 Barbados</option>
+    <option value="BE" selected={ passedValue === "BE" ? true : false }>🇧🇪 Belgia</option>
+    <option value="BZ" selected={ passedValue === "BZ" ? true : false }>🇧🇿 Belize</option>
+    <option value="BJ" selected={ passedValue === "BJ" ? true : false }>🇧🇯 Benin</option>
+    <option value="BT" selected={ passedValue === "BT" ? true : false }>🇧🇹 Bhutan</option>
+    <option value="BY" selected={ passedValue === "BY" ? true : false }>🇧🇾 Białoruś</option>
+    <option value="BO" selected={ passedValue === "BO" ? true : false }>🇧🇴 Boliwia</option>
+    <option value="BA" selected={ passedValue === "BA" ? true : false }>🇧🇦 Bośnia i Hercegowina</option>
+    <option value="BW" selected={ passedValue === "BW" ? true : false }>🇧🇼 Botswana</option>
+    <option value="BR" selected={ passedValue === "BR" ? true : false }>🇧🇷 Brazylia</option>
+    <option value="BN" selected={ passedValue === "BN" ? true : false }>🇧🇳 Brunei</option>
+    <option value="BG" selected={ passedValue === "BG" ? true : false }>🇧🇬 Bułgaria</option>
+    <option value="BF" selected={ passedValue === "BF" ? true : false }>🇧🇫 Burkina Faso</option>
+    <option value="BI" selected={ passedValue === "BI" ? true : false }>🇧🇮 Burundi</option>
+    <option value="CV" selected={ passedValue === "CV" ? true : false }>🇨🇻 Cabo Verde</option>
+    <option value="CL" selected={ passedValue === "CL" ? true : false }>🇨🇱 Chile</option>
+    <option value="HR" selected={ passedValue === "HR" ? true : false }>🇭🇷 Chorwacja</option>
+    <option value="TD" selected={ passedValue === "TD" ? true : false }>🇹🇩 Czad</option>
+    <option value="ME" selected={ passedValue === "ME" ? true : false }>🇲🇪 Czarnogóra</option>
+    <option value="CZ" selected={ passedValue === "CZ" ? true : false }>🇨🇿 Czechy</option>
+    <option value="DJ" selected={ passedValue === "DJ" ? true : false }>🇩🇯 Dżibuti</option>
+    <option value="DM" selected={ passedValue === "DM" ? true : false }>🇩🇲 Dominika</option>
+    <option value="DO" selected={ passedValue === "DO" ? true : false }>🇩🇴 Dominikana</option>
+    <option value="EG" selected={ passedValue === "EG" ? true : false }>🇪🇬 Egipt</option>
+    <option value="EC" selected={ passedValue === "EC" ? true : false }>🇪🇨 Ekwador</option>
+    <option value="ER" selected={ passedValue === "ER" ? true : false }>🇪🇷 Erytrea</option>
+    <option value="EE" selected={ passedValue === "EE" ? true : false }>🇪🇪 Estonia</option>
+    <option value="SZ" selected={ passedValue === "SZ" ? true : false }>🇸🇿 Eswatini</option>
+    <option value="ET" selected={ passedValue === "ET" ? true : false }>🇪🇹 Etiopia</option>
+    <option value="FJ" selected={ passedValue === "FJ" ? true : false }>🇫🇯 Fidżi</option>
+    <option value="PH" selected={ passedValue === "PH" ? true : false }>🇵🇭 Filipiny</option>
+    <option value="FI" selected={ passedValue === "FI" ? true : false }>🇫🇮 Finlandia</option>
+    <option value="FR" selected={ passedValue === "FR" ? true : false }>🇫🇷 Francja</option>
+    <option value="GA" selected={ passedValue === "GA" ? true : false }>🇬🇦 Gabon</option>
+    <option value="GM" selected={ passedValue === "GM" ? true : false }>🇬🇲 Gambia</option>
+    <option value="GH" selected={ passedValue === "GH" ? true : false }>🇬🇭 Ghana</option>
+    <option value="GR" selected={ passedValue === "GR" ? true : false }>🇬🇷 Grecja</option>
+    <option value="GD" selected={ passedValue === "GD" ? true : false }>🇬🇩 Grenada</option>
+    <option value="GT" selected={ passedValue === "GT" ? true : false }>🇬🇹 Gwatemala</option>
+    <option value="GW" selected={ passedValue === "GW" ? true : false }>🇬🇼 Gwinea Bissau</option>
+    <option value="GN" selected={ passedValue === "GN" ? true : false }>🇬🇳 Gwinea</option>
+    <option value="GY" selected={ passedValue === "GY" ? true : false }>🇬🇾 Gujana</option>
+    <option value="HT" selected={ passedValue === "HT" ? true : false }>🇭🇹 Haiti</option>
+    <option value="ES" selected={ passedValue === "ES" ? true : false }>🇪🇸 Hiszpania</option>
+    <option value="HN" selected={ passedValue === "HN" ? true : false }>🇭🇳 Honduras</option>
+    <option value="IN" selected={ passedValue === "IN" ? true : false }>🇮🇳 Indie</option>
+    <option value="ID" selected={ passedValue === "ID" ? true : false }>🇮🇩 Indonezja</option>
+    <option value="IQ" selected={ passedValue === "IQ" ? true : false }>🇮🇶 Irak</option>
+    <option value="IR" selected={ passedValue === "IR" ? true : false }>🇮🇷 Iran</option>
+    <option value="IE" selected={ passedValue === "IE" ? true : false }>🇮🇪 Irlandia</option>
+    <option value="IS" selected={ passedValue === "IS" ? true : false }>🇮🇸 Islandia</option>
+    <option value="IL" selected={ passedValue === "IL" ? true : false }>🇮🇱 Izrael</option>
+    <option value="JM" selected={ passedValue === "JM" ? true : false }>🇯🇲 Jamajka</option>
+    <option value="JP" selected={ passedValue === "JP" ? true : false }>🇯🇵 Japonia</option>
+    <option value="YE" selected={ passedValue === "YE" ? true : false }>🇾🇪 Jemen</option>
+    <option value="JO" selected={ passedValue === "JO" ? true : false }>🇯🇴 Jordania</option>
+    <option value="KH" selected={ passedValue === "KH" ? true : false }>🇰🇭 Kambodża</option>
+    <option value="CM" selected={ passedValue === "CM" ? true : false }>🇨🇲 Kamerun</option>
+    <option value="CA" selected={ passedValue === "CA" ? true : false }>🇨🇦 Kanada</option>
+    <option value="QA" selected={ passedValue === "QA" ? true : false }>🇶🇦 Katar</option>
+    <option value="KZ" selected={ passedValue === "KZ" ? true : false }>🇰🇿 Kazachstan</option>
+    <option value="KE" selected={ passedValue === "KE" ? true : false }>🇰🇪 Kenia</option>
+    <option value="KG" selected={ passedValue === "KG" ? true : false }>🇰🇬 Kirgistan</option>
+    <option value="KI" selected={ passedValue === "KI" ? true : false }>🇰🇮 Kiribati</option>
+    <option value="CO" selected={ passedValue === "CO" ? true : false }>🇨🇴 Kolumbia</option>
+    <option value="KM" selected={ passedValue === "KM" ? true : false }>🇰🇲 Komory</option>
+    <option value="CG" selected={ passedValue === "CG" ? true : false }>🇨🇬 Kongo</option>
+    <option value="CD" selected={ passedValue === "CD" ? true : false }>🇨🇩 Kongo (DRK)</option>
+    <option value="KP" selected={ passedValue === "KP" ? true : false }>🇰🇵 Korea Północna</option>
+    <option value="KR" selected={ passedValue === "KR" ? true : false }>🇰🇷 Korea Południowa</option>
+    <option value="CR" selected={ passedValue === "CR" ? true : false }>🇨🇷 Kostaryka</option>
+    <option value="CU" selected={ passedValue === "CU" ? true : false }>🇨🇺 Kuba</option>
+    <option value="KW" selected={ passedValue === "KW" ? true : false }>🇰🇼 Kuwejt</option>
+    <option value="LA" selected={ passedValue === "LA" ? true : false }>🇱🇦 Laos</option>
+    <option value="LS" selected={ passedValue === "LS" ? true : false }>🇱🇸 Lesotho</option>
+    <option value="LB" selected={ passedValue === "LB" ? true : false }>🇱🇧 Liban</option>
+    <option value="LR" selected={ passedValue === "LR" ? true : false }>🇱🇷 Liberia</option>
+    <option value="LY" selected={ passedValue === "LY" ? true : false }>🇱🇾 Libia</option>
+    <option value="LI" selected={ passedValue === "LI" ? true : false }>🇱🇮 Liechtenstein</option>
+    <option value="LT" selected={ passedValue === "LT" ? true : false }>🇱🇹 Litwa</option>
+    <option value="LU" selected={ passedValue === "LU" ? true : false }>🇱🇺 Luksemburg</option>
+    <option value="LV" selected={ passedValue === "LV" ? true : false }>🇱🇻 Łotwa</option>
+    <option value="MK" selected={ passedValue === "MK" ? true : false }>🇲🇰 Macedonia Północna</option>
+    <option value="MG" selected={ passedValue === "MG" ? true : false }>🇲🇬 Madagaskar</option>
+    <option value="MW" selected={ passedValue === "MW" ? true : false }>🇲🇼 Malawi</option>
+    <option value="MV" selected={ passedValue === "MV" ? true : false }>🇲🇻 Malediwy</option>
+    <option value="MY" selected={ passedValue === "MY" ? true : false }>🇲🇾 Malezja</option>
+    <option value="ML" selected={ passedValue === "ML" ? true : false }>🇲🇱 Mali</option>
+    <option value="MT" selected={ passedValue === "MT" ? true : false }>🇲🇹 Malta</option>
+    <option value="MA" selected={ passedValue === "MA" ? true : false }>🇲🇦 Maroko</option>
+    <option value="MH" selected={ passedValue === "MH" ? true : false }>🇲🇭 Wyspy Marshalla</option>
+    <option value="MR" selected={ passedValue === "MR" ? true : false }>🇲🇷 Mauretania</option>
+    <option value="MU" selected={ passedValue === "MU" ? true : false }>🇲🇺 Mauritius</option>
+    <option value="MX" selected={ passedValue === "MX" ? true : false }>🇲🇽 Meksyk</option>
+    <option value="FM" selected={ passedValue === "FM" ? true : false }>🇫🇲 Mikronezja</option>
+    <option value="MD" selected={ passedValue === "MD" ? true : false }>🇲🇩 Mołdawia</option>
+    <option value="MN" selected={ passedValue === "MN" ? true : false }>🇲🇳 Mongolia</option>
+    <option value="MZ" selected={ passedValue === "MZ" ? true : false }>🇲🇿 Mozambik</option>
+    <option value="NA" selected={ passedValue === "NA" ? true : false }>🇳🇦 Namibia</option>
+    <option value="NR" selected={ passedValue === "NR" ? true : false }>🇳🇷 Nauru</option>
+    <option value="NP" selected={ passedValue === "NP" ? true : false }>🇳🇵 Nepal</option>
+    <option value="DE" selected={ passedValue === "DE" ? true : false }>🇩🇪 Niemcy</option>
+    <option value="NE" selected={ passedValue === "NE" ? true : false }>🇳🇪 Niger</option>
+    <option value="NG" selected={ passedValue === "NG" ? true : false }>🇳🇬 Nigeria</option>
+    <option value="NI" selected={ passedValue === "NI" ? true : false }>🇳🇮 Nikaragua</option>
+    <option value="NO" selected={ passedValue === "NO" ? true : false }>🇳🇴 Norwegia</option>
+    <option value="NZ" selected={ passedValue === "NZ" ? true : false }>🇳🇿 Nowa Zelandia</option>
+    <option value="OM" selected={ passedValue === "OM" ? true : false }>🇴🇲 Oman</option>
+    <option value="PK" selected={ passedValue === "PK" ? true : false }>🇵🇰 Pakistan</option>
+    <option value="PW" selected={ passedValue === "PW" ? true : false }>🇵🇼 Palau</option>
+    <option value="PA" selected={ passedValue === "PA" ? true : false }>🇵🇦 Panama</option>
+    <option value="PG" selected={ passedValue === "PG" ? true : false }>🇵🇬 Papua-Nowa Gwinea</option>
+    <option value="PY" selected={ passedValue === "PY" ? true : false }>🇵🇾 Paragwaj</option>
+    <option value="PE" selected={ passedValue === "PE" ? true : false }>🇵🇪 Peru</option>
+    <option value="PL" selected={ passedValue === "PL" ? true : false }>🇵🇱 Polska</option>
+    <option value="PT" selected={ passedValue === "PT" ? true : false }>🇵🇹 Portugalia</option>
+    <option value="CG" selected={ passedValue === "CG" ? true : false }>🇨🇬 Republika Konga</option>
+    <option value="KR" selected={ passedValue === "KR" ? true : false }>🇰🇷 Republika Korei</option>
+    <option value="MK" selected={ passedValue === "MK" ? true : false }>🇲🇰 Republika Macedonii Północnej</option>
+    <option value="MD" selected={ passedValue === "MD" ? true : false }>🇲🇩 Republika Mołdawii</option>
+    <option value="RO" selected={ passedValue === "RO" ? true : false }>🇷🇴 Rumunia</option>
+    <option value="RW" selected={ passedValue === "RW" ? true : false }>🇷🇼 Rwanda</option>
+    <option value="EH" selected={ passedValue === "EH" ? true : false }>🇪🇭 Sahara Zachodnia</option>
+    <option value="KN" selected={ passedValue === "KN" ? true : false }>🇰🇳 Saint Kitts i Nevis</option>
+    <option value="LC" selected={ passedValue === "LC" ? true : false }>🇱🇨 Saint Lucia</option>
+    <option value="VC" selected={ passedValue === "VC" ? true : false }>🇻🇨 Saint Vincent i Grenadyny</option>
+    <option value="SV" selected={ passedValue === "SV" ? true : false }>🇸🇻 Salwador</option>
+    <option value="WS" selected={ passedValue === "WS" ? true : false }>🇼🇸 Samoa</option>
+    <option value="SM" selected={ passedValue === "SM" ? true : false }>🇸🇲 San Marino</option>
+    <option value="SN" selected={ passedValue === "SN" ? true : false }>🇸🇳 Senegal</option>
+    <option value="RS" selected={ passedValue === "RS" ? true : false }>🇷🇸 Serbia</option>
+    <option value="SC" selected={ passedValue === "SC" ? true : false }>🇸🇨 Seszele</option>
+    <option value="SL" selected={ passedValue === "SL" ? true : false }>🇸🇱 Sierra Leone</option>
+    <option value="SG" selected={ passedValue === "SG" ? true : false }>🇸🇬 Singapur</option>
+    <option value="SK" selected={ passedValue === "SK" ? true : false }>🇸🇰 Słowacja</option>
+    <option value="SI" selected={ passedValue === "SI" ? true : false }>🇸🇮 Słowenia</option>
+    <option value="SO" selected={ passedValue === "SO" ? true : false }>🇸🇴 Somalia</option>
+    <option value="SD" selected={ passedValue === "SD" ? true : false }>🇸🇩 Sudan</option>
+    <option value="SS" selected={ passedValue === "SS" ? true : false }>🇸🇸 Sudan Południowy</option>
+    <option value="SR" selected={ passedValue === "SR" ? true : false }>🇸🇷 Surinam</option>
+    <option value="SY" selected={ passedValue === "SY" ? true : false }>🇸🇾 Syria</option>
+    <option value="CH" selected={ passedValue === "CH" ? true : false }>🇨🇭 Szwajcaria</option>
+    <option value="SE" selected={ passedValue === "SE" ? true : false }>🇸🇪 Szwecja</option>
+    <option value="TJ" selected={ passedValue === "TJ" ? true : false }>🇹🇯 Tadżykistan</option>
+    <option value="TH" selected={ passedValue === "TH" ? true : false }>🇹🇭 Tajlandia</option>
+    <option value="TZ" selected={ passedValue === "TZ" ? true : false }>🇹🇿 Tanzania</option>
+    <option value="TG" selected={ passedValue === "TG" ? true : false }>🇹🇬 Togo</option>
+    <option value="TO" selected={ passedValue === "TO" ? true : false }>🇹🇴 Tonga</option>
+    <option value="TT" selected={ passedValue === "TT" ? true : false }>🇹🇹 Trynidad i Tobago</option>
+    <option value="TN" selected={ passedValue === "TN" ? true : false }>🇹🇳 Tunezja</option>
+    <option value="TR" selected={ passedValue === "TR" ? true : false }>🇹🇷 Turcja</option>
+    <option value="TM" selected={ passedValue === "TM" ? true : false }>🇹🇲 Turkmenistan</option>
+    <option value="TV" selected={ passedValue === "TV" ? true : false }>🇹🇻 Tuvalu</option>
+    <option value="UG" selected={ passedValue === "UG" ? true : false }>🇺🇬 Uganda</option>
+    <option value="UA" selected={ passedValue === "UA" ? true : false }>🇺🇦 Ukraina</option>
+    <option value="UY" selected={ passedValue === "UY" ? true : false }>🇺🇾 Urugwaj</option>
+    <option value="UZ" selected={ passedValue === "UZ" ? true : false }>🇺🇿 Uzbekistan</option>
+    <option value="VU" selected={ passedValue === "VU" ? true : false }>🇻🇺 Vanuatu</option>
+    <option value="VA" selected={ passedValue === "VA" ? true : false }>🇻🇦 Watykan</option>
+    <option value="VE" selected={ passedValue === "VE" ? true : false }>🇻🇪 Wenezuela</option>
+    <option value="HU" selected={ passedValue === "HU" ? true : false }>🇭🇺 Węgry</option>
+    <option value="GB" selected={ passedValue === "GB" ? true : false }>🇬🇧 Wielka Brytania</option>
+    <option value="VN" selected={ passedValue === "VN" ? true : false }>🇻🇳 Wietnam</option>
+    <option value="IT" selected={ passedValue === "IT" ? true : false }>🇮🇹 Włochy</option>
+    <option value="ZR" selected={ passedValue === "ZR" ? true : false }>🇿🇲 Zambia</option>
+    <option value="ZW" selected={ passedValue === "ZW" ? true : false }>🇿🇼 Zimbabwe</option>
+    <option value="AE" selected={ passedValue === "AE" ? true : false }>🇦🇪 Zjednoczone Emiraty Arabskie</option>
+</select>

@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import { supabase } from "../utils/supabase";
 import type { PhoneData } from "../utils/interface/PhoneData";
 import PhoneDeletion from "../components/PhoneDeletionButton";
+import editIcon from "../assets/editIcon.svg";
 
 const { cookies, redirect } = Astro;
 
@@ -57,6 +58,14 @@ const imageUrls = imageNames?.map((imageName: string) => {
                 {
                     isLogged && (
                         <div class="flex flex-row p-0 m-0 justify-center items-center">
+                            <a href={`/phoneEdit?id=${data.id}`}>
+                                {" "}
+                                <img
+                                    src={editIcon.src}
+                                    class="hover:scale-110"
+                                    alt="Link Icon"
+                                />{" "}
+                            </a>
                             <PhoneDeletion id={data.id} client:load />
                         </div>
                     )

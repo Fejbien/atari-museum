@@ -12,8 +12,21 @@ if (!accessToken || !refreshToken) {
     return redirect("/signin");
 }
 
-// const { data, error } = await supabase.auth.getUser(accessToken.value);
-// console.log(data.user?.role);
+const params = Astro.url.searchParams;
+const id = params.get("id");
+
+const { data: pData, error: phoneError } = await supabase
+    .from("telefony")
+    .select()
+    .eq("id", id);
+
+if (phoneError) console.error(phoneError);
+if (pData?.length == 0) {
+    console.error("No data found for id: " + id);
+    return Astro.redirect("/phones");
+}
+
+const phoneData = pData[0];
 
 if (Astro.request.method === "POST") {
     const formData = await Astro.request.formData();
@@ -29,13 +42,10 @@ if (Astro.request.method === "POST") {
 
     const { data, error } = await supabase
         .from("telefony")
-        .insert(dataVals)
-        .select("id");
+        .update(dataVals)
+        .eq("id", id);
 
-    let id = 0;
     if (error) console.error(error);
-    if (!data) console.log("Null id");
-    else id = data[0].id;
 
     if (!error && images[0].size > 0) {
         for (const image of images) {
@@ -47,13 +57,32 @@ if (Astro.request.method === "POST") {
                         upsert: false,
                     });
 
-                    if (uploadError) console.error(uploadError);
+            if (uploadError) console.error(uploadError);
         }
     }
 
-    // console.log("Redirecting to /description?id=" + id);
     return Astro.redirect("/phoneDetails?id=" + id);
 }
+
+const { data: imageNamesFetch, error: imagesError } = await supabase.storage
+    .from("images")
+    .list("telefony/" + id);
+
+if (imagesError) console.error(imagesError);
+
+const imageNames = imageNamesFetch?.map((image: any) => image.name) || [];
+
+const imageUrls = imageNames?.map((imageName: string) => {
+    const { data: image } = supabase.storage
+        .from("images")
+        .getPublicUrl(`telefony/${id}/${imageName}`);
+    return image.publicUrl;
+});
+
+const imageDictionary: { [key: string]: string } = {};
+imageNames.forEach((name, index) => {
+    imageDictionary[name] = imageUrls[index];
+});
 ---
 
 <Layout title="Formularz">
@@ -84,6 +113,7 @@ if (Astro.request.method === "POST") {
                                     type="text"
                                     id="producent"
                                     name="producent"
+                                    value={phoneData.producent}
                                 />
                             </div>
                         </div>
@@ -103,6 +133,7 @@ if (Astro.request.method === "POST") {
                                     type="text"
                                     id="model"
                                     name="model"
+                                    value={phoneData.model}
                                 />
                             </div>
                         </div>
@@ -122,6 +153,7 @@ if (Astro.request.method === "POST") {
                                     type="text"
                                     id="oznaczenie"
                                     name="oznaczenie"
+                                    value={phoneData.oznaczenie}
                                 />
                             </div>
                         </div>
@@ -161,6 +193,7 @@ if (Astro.request.method === "POST") {
                                     id="kolor"
                                     name="kolor"
                                     list="colours"
+                                    value={phoneData.kolor}
                                 />
                             </div>
                         </div>
@@ -175,7 +208,7 @@ if (Astro.request.method === "POST") {
                                     type="checkbox"
                                     name="sprawny"
                                     value="1"
-                                    checked
+                                    checked={phoneData.sprawny ? true : false}
                                 />
                                 <span class="text-sm">Sprawny</span>
                             </label>
@@ -196,6 +229,7 @@ if (Astro.request.method === "POST") {
                                     type="text"
                                     id="stan"
                                     name="stan"
+                                    value={phoneData.stan}
                                 />
                             </div>
                         </div>
@@ -215,6 +249,7 @@ if (Astro.request.method === "POST") {
                                     type="text"
                                     id="numer_seryjny"
                                     name="numer_seryjny"
+                                    value={phoneData.numer_seryjny}
                                 />
                             </div>
                         </div>
@@ -229,7 +264,7 @@ if (Astro.request.method === "POST") {
                                 >
                             </div>
                             <div class="md:w-2/3">
-                                <CountryPicker />
+                                <CountryPicker passedValue={phoneData.kraj}/>
                             </div>
                         </div>
                     </div>
@@ -248,6 +283,7 @@ if (Astro.request.method === "POST") {
                                     type="text"
                                     id="jezyk"
                                     name="jezyk"
+                                    value={phoneData.jezyk}
                                 />
                             </div>
                         </div>
@@ -269,6 +305,7 @@ if (Astro.request.method === "POST") {
                                     type="text"
                                     id="simlock"
                                     name="simlock"
+                                    value={phoneData.simlock}
                                 />
                             </div>
                         </div>
@@ -286,7 +323,8 @@ if (Astro.request.method === "POST") {
                                 <textarea
                                     class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                                     id="uwagi"
-                                    name="uwagi"></textarea>
+                                    name="uwagi">{phoneData.uwagi}
+                                </textarea>
                             </div>
                         </div>
                     </div>
@@ -300,7 +338,7 @@ if (Astro.request.method === "POST") {
                                     type="checkbox"
                                     name="opakowanie"
                                     value="1"
-                                    checked
+                                    checked={phoneData.opakowanie ? true : false}
                                 />
                                 <span class="text-sm">Opakowanie</span>
                             </label>
@@ -321,6 +359,7 @@ if (Astro.request.method === "POST") {
                                     type="date"
                                     id="rok_produkcji"
                                     name="rok_produkcji"
+                                    value={phoneData.rok_produkcji}
                                 />
                             </div>
                         </div>
@@ -340,6 +379,7 @@ if (Astro.request.method === "POST") {
                                     type="text"
                                     id="zdarzenie"
                                     name="zdarzenie"
+                                    value={phoneData.zdarzenie}
                                 />
                             </div>
                         </div>
@@ -359,6 +399,7 @@ if (Astro.request.method === "POST") {
                                     type="text"
                                     id="model_baterii"
                                     name="model_baterii"
+                                    value={phoneData.model_baterii}
                                 />
                             </div>
                         </div>
@@ -375,9 +416,10 @@ if (Astro.request.method === "POST") {
                             <div class="md:w-2/3">
                                 <input
                                     class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                                    type="text"
+                                    type="date"
                                     id="made"
                                     name="made"
+                                    value={phoneData.made}
                                 />
                             </div>
                         </div>
@@ -397,6 +439,7 @@ if (Astro.request.method === "POST") {
                                     type="text"
                                     id="life_timer"
                                     name="life_timer"
+                                    value={phoneData.life_timer}
                                 />
                             </div>
                         </div>
@@ -411,13 +454,17 @@ if (Astro.request.method === "POST") {
                                     type="checkbox"
                                     name="posiadany"
                                     value="1"
-                                    checked
+                                    checked={phoneData.posiadany ? true : false}
                                 />
                                 <span class="text-sm">Posiadany</span>
                             </label>
                         </div>
                     </div>
 
+                    {Object.keys(imageDictionary).map(key => (
+                        <a href={imageDictionary[key]}>{key}</a> <br />
+                    ))}
+                    
                     <div class="mb-6">
                         <div class="flex flex-col md:flex-row md:items-center">
                             <div class="md:w-1/3"></div>
@@ -437,7 +484,7 @@ if (Astro.request.method === "POST") {
                         class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded w-3/4"
                         onclick="submit"
                     >
-                        Dodaj
+                        Edytuj
                     </button>
                 </div>
             </form>
