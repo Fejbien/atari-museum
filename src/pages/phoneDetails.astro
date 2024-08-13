@@ -59,12 +59,11 @@ const imageUrls = imageNames?.map((imageName: string) => {
                     isLogged && (
                         <div class="flex flex-row p-0 m-0 justify-center items-center">
                             <a href={`/phoneEdit?id=${data.id}`}>
-                                {" "}
                                 <img
                                     src={editIcon.src}
-                                    class="hover:scale-110"
+                                    class="hover:scale-110 w-5 h-5"
                                     alt="Link Icon"
-                                />{" "}
+                                />
                             </a>
                             <PhoneDeletion id={data.id} client:load />
                         </div>

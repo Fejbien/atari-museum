@@ -26,7 +26,7 @@ if (pData?.length == 0) {
     return Astro.redirect("/phones");
 }
 
-const phoneData = pData[0];
+const phoneData = pData ? pData[0] : null;
 
 if (Astro.request.method === "POST") {
     const formData = await Astro.request.formData();
