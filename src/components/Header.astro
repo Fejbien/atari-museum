@@ -14,14 +14,18 @@ if (accessToken && refreshToken) {
     });
 
     if (error) {
-        cookies.delete("accessToken", {
-            path: "/",
-        });
-        cookies.delete("refreshToken", {
-            path: "/",
-        });
+        console.error(error);
+        cookies.delete("accessToken", { path: "/" });
+        cookies.delete("refreshToken", { path: "/" });
+        console.log("Deleted cookies due to an error above.");
+        // cookies.delete("accessToken", {
+        //     path: "/",
+        // });
+        // cookies.delete("refreshToken", {
+        //     path: "/",
+        // });
 
-        return redirect("/signin");
+        // return redirect("/signin");
     }
 
     email = data?.user?.email || "Unknown";
