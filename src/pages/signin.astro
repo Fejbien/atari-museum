@@ -1,5 +1,5 @@
 ---
-import LoginUI from "../components/signinn";
+import LoginUI from "../components/signin";
 import Layout from "../layouts/Layout.astro";
 
 const { cookies, redirect } = Astro;
@@ -13,7 +13,9 @@ if (accessToken && refreshToken) {
 ---
 
 <Layout title="Logowanie">
-    <div class="flex flex-row w-full h-full justify-center">
-        <LoginUI client:load />
+    <div class="h-screen pt-12">
+        <div class="flex flex-row w-full h-full justify-center">
+            <LoginUI client:load />
+        </div>
     </div>
 </Layout>
