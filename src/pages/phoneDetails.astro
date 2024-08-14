@@ -6,6 +6,9 @@ import type { PhoneData } from "../utils/interface/PhoneData";
 import PhoneDeletion from "../components/PhoneDeletionButton";
 import editIcon from "../assets/editIcon.svg";
 
+// TODO:
+// make custom scrollbars
+
 const { cookies, redirect } = Astro;
 
 const accessToken = cookies.get("accessToken");
@@ -163,20 +166,20 @@ const imageUrls = imageNames?.map((imageName: string) => {
             </div>
 
             <div
-                class="h-full w-full flex flex-row flex-wrap gap-4 m-4 mr-0 overflow-y-scroll content-start"
+                class="h-full w-full flex flex-row flex-wrap overflow-y-auto gap-4 p-4 m-4 ml-0 border-[3px] border-black content-start bg-white"
             >
                 <PhoneImageGallery imageUrls={imageUrls} client:only="react" />
-                {
-                    isLogged && (
-                        <a
-                            href={`/editPhonePhotos?id=${data.id}`}
-                            class="fixed bottom-4 right-4 bg-blue-500 text-white p-2 rounded"
-                        >
-                            Edytuj zdjęcia
-                        </a>
-                    )
-                }
             </div>
+            {
+                isLogged && (
+                    <a
+                        href={`/editPhonePhotos?id=${data.id}`}
+                        class="fixed bottom-4 right-4 bg-blue-500 text-white p-2 rounded"
+                    >
+                        Edytuj zdjęcia
+                    </a>
+                )
+            }
         </div>
     </div>
 </Layout>

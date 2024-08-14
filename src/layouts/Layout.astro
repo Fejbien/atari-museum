@@ -1,5 +1,26 @@
 ---
 import Header from "../components/Header.astro";
+import { supabase } from "../utils/supabase";
+
+const { cookies, redirect } = Astro;
+
+const accessToken = cookies.get("accessToken");
+const refreshToken = cookies.get("refreshToken");
+
+if (accessToken || refreshToken) {
+    const { data: userAuth, error: userAuthError } =
+        await supabase.auth.getUser(accessToken?.value);
+
+    console.log(userAuth.user?.role);
+
+    // to wyjebie error jak uzytkownik nie ma odswierzonego jwt
+    // the responose was already sent
+    // ni chuja chce mi sie tego moze kiedys
+    // ale zabezpieczenie dziala B)
+    // TODO:
+    // - fix whats above
+    if (userAuthError) return redirect("/signin");
+}
 
 interface Props {
     title: string;
@@ -14,7 +35,7 @@ const { title } = Astro.props;
         <meta charset="UTF-8" />
         <meta name="description" content="Astro description" />
         <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link

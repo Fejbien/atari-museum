@@ -18,6 +18,10 @@ export const POST: APIRoute = async ({
         await supabase.auth.getUser(accessToken.value);
     console.log(userAuth.user?.role);
 
+    if (userAuthError)
+        // return redirect("/signin");
+        return new Response("Unauthorized", { status: 401 });
+
     const data = await request.formData();
     const id = data.get("id");
     console.log("Deleting phone entry with id:", id);
