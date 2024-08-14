@@ -166,6 +166,16 @@ const imageUrls = imageNames?.map((imageName: string) => {
                 class="h-full w-full flex flex-row flex-wrap gap-4 m-4 mr-0 overflow-y-scroll content-start"
             >
                 <PhoneImageGallery imageUrls={imageUrls} client:only="react" />
+                {
+                    isLogged && (
+                        <a
+                            href={`/editPhonePhotos?id=${data.id}`}
+                            class="fixed bottom-4 right-4 bg-blue-500 text-white p-2 rounded"
+                        >
+                            Edytuj zdjęcia
+                        </a>
+                    )
+                }
             </div>
         </div>
     </div>

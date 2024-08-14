@@ -1,0 +1,98 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { supabase } from "../utils/supabase";
+import PhoneImageEdition from "../components/PhoneImageEdition";
+
+const { cookies, redirect } = Astro;
+
+const accessToken = cookies.get("accessToken");
+const refreshToken = cookies.get("refreshToken");
+
+if (!accessToken || !refreshToken) {
+    return redirect("/signin");
+}
+
+const params = Astro.url.searchParams;
+const id = params.get("id");
+
+const { data: pData, error: phoneError } = await supabase
+    .from("telefony")
+    .select()
+    .eq("id", id);
+
+if (phoneError) console.error(phoneError);
+if (pData?.length == 0) {
+    console.error("No data found for id: " + id);
+    return Astro.redirect("/phones");
+}
+
+const phoneData = pData ? pData[0] : null;
+
+if (Astro.request.method === "POST") {
+    const formData = await Astro.request.formData();
+
+    let dataVals: { [key: string]: any } = {};
+    for (const [key, value] of formData.entries()) {
+        if (value === "") continue;
+        if (key === "file-input") continue;
+        dataVals[key] = value;
+    }
+
+    let images = formData.getAll("file-input") as File[];
+
+    const { data, error } = await supabase
+        .from("telefony")
+        .update(dataVals)
+        .eq("id", id);
+
+    if (error) console.error(error);
+
+    if (!error && images[0].size > 0) {
+        for (const image of images) {
+            const { data: uploadData, error: uploadError } =
+                await supabase.storage
+                    .from("images")
+                    .upload("telefony/" + id + "/" + image.name, image, {
+                        cacheControl: "public, max-age=31536000",
+                        upsert: false,
+                    });
+
+            if (uploadError) console.error(uploadError);
+        }
+    }
+
+    return Astro.redirect("/phoneDetails?id=" + id);
+}
+
+const { data: imageNamesFetch, error: imagesError } = await supabase.storage
+    .from("images")
+    .list("telefony/" + id);
+
+if (imagesError) console.error(imagesError);
+
+const imageNames = imageNamesFetch?.map((image: any) => image.name) || [];
+
+const imageUrls = imageNames?.map((imageName: string) => {
+    const { data: image } = supabase.storage
+        .from("images")
+        .getPublicUrl(`telefony/${id}/${imageName}`);
+    return image.publicUrl;
+});
+
+const imageDictionary: { [key: string]: string } = {};
+imageNames.forEach((name, index) => {
+    imageDictionary[name] = imageUrls[index];
+});
+---
+
+<Layout title="Atari muzeum">
+    <div class="h-screen pt-12 pb-8 overflow-auto">
+        <PhoneImageEdition imageUrls={imageUrls} client:only="react" />
+        <a
+            href={`/phoneDetails?id=${phoneData.id}`}
+            class="fixed bottom-4 right-4 bg-blue-500 text-white p-2 rounded"
+        >
+            Powrót
+        </a>
+    </div>
+</Layout>
