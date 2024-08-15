@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { supabase } from "../utils/supabase";
 import PhoneImageEdition from "../components/PhoneImageEdition";
+import { number } from "astro/zod";
 
 const { cookies, redirect } = Astro;
 
@@ -38,7 +39,11 @@ imageNames.forEach((name, index) => {
 
 <Layout title="Atari muzeum">
     <div class="h-screen pt-12 pb-8 overflow-auto">
-        <PhoneImageEdition imageUrls={imageUrls} client:only="react" />
+        <PhoneImageEdition
+            imageUrls={imageUrls}
+            id={id ?? ""}
+            client:only="react"
+        />
         <a
             href={`/phoneDetails?id=${id}`}
             class="fixed bottom-4 right-4 bg-blue-500 text-white p-2 rounded"

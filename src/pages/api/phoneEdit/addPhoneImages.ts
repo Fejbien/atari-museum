@@ -22,25 +22,24 @@ export const POST: APIRoute = async ({
         // return redirect("/signin");
         return new Response("Unauthorized", { status: 401 });
 
-    const data = await request.formData();
-    const selectedImages = data
-        .get("selectedImagesPaths")
-        ?.toString()
-        .split(",");
+    const formData = await request.formData();
 
-    if (!selectedImages)
-        // return redirect('/error');
-        return new Response("No selected images", { status: 400 });
+    const id = formData.get("id") as string;
+    let images = formData.getAll("file-input") as File[];
 
-    console.log("Deleting images: ", selectedImages);
-    const { data: deletionData, error: deleteionError } = await supabase.storage
-        .from("images")
-        .remove(selectedImages || []);
+    if (images[0].size > 0) {
+        for (const image of images) {
+            const { data: uploadData, error: uploadError } =
+                await supabase.storage
+                    .from("images")
+                    .upload("telefony/" + id + "/" + image.name, image, {
+                        cacheControl: "public, max-age=31536000",
+                        upsert: false,
+                    });
 
-    if (deleteionError) {
-        console.log("Error deleting images: ", deleteionError);
-        // return redirect('/error');
-        return new Response("Error deleting images", { status: 500 });
+            if (uploadError) console.error(uploadError);
+            console.log(uploadData);
+        }
     }
 
     // return redirect('/');

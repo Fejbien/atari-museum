@@ -6,7 +6,13 @@ import { useState, type FormEvent, type FormEventHandler } from "react";
 // Add chip showing what was done
 // :D
 
-function PhoneImageEdition({ imageUrls }: { imageUrls: string[] }) {
+function PhoneImageEdition({
+    imageUrls,
+    id,
+}: {
+    imageUrls: string[];
+    id: string;
+}) {
     const [selectedImages, setSelectedImages] = useState<number[]>([]);
 
     const handleSelected = (id: number) => {
@@ -26,9 +32,6 @@ function PhoneImageEdition({ imageUrls }: { imageUrls: string[] }) {
             body: new URLSearchParams({
                 selectedImagesPaths: selectedImagesPaths.join(","),
             }),
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
         });
 
         if (response.status == 200) window.location.reload();
@@ -37,7 +40,26 @@ function PhoneImageEdition({ imageUrls }: { imageUrls: string[] }) {
 
     const handleImagesSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log(e.currentTarget);
+        const formData = new FormData();
+        const files = (
+            document.getElementById("file-input") as HTMLInputElement
+        ).files;
+
+        if (!files) return;
+
+        for (let i = 0; i < files.length; i++)
+            formData.append("file-input", files[i]);
+
+        formData.append("id", id);
+
+        if (files?.length === 0) return;
+
+        const response = await fetch("/api/phoneEdit/addPhoneImages", {
+            method: "POST",
+            body: formData,
+        });
+
+        if (response.status == 200) window.location.reload();
     };
 
     return (
