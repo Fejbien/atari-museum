@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import PhoneEntry from "../components/PhoneEntry";
 import { supabase } from "./../utils/supabase";
 import type { PhoneData } from "../utils/interface/PhoneData";
+import gearImg from "../assets/gear.png";
 
 const { data, error } = await supabase.from("telefony").select();
 
@@ -42,12 +43,25 @@ const isLogged = accessToken && refreshToken;
         </div>
         {
             isLogged && (
-                <a
-                    href="/addPhone"
-                    class="fixed bottom-4 right-4 bg-blue-500 text-white p-2 rounded"
-                >
-                    Dodaj telefon
-                </a>
+                <div class="fixed bottom-4 right-4">
+                    <a
+                        href="/addPhone"
+                        class=" bg-blue-500 text-white p-2 rounded
+                    hover:bg-blue-700 hover:text-white"
+                    >
+                        Dodaj telefon
+                    </a>
+                    {/* <button
+                        class=" bg-transparent text-white p-2 rounded
+                    hover:bg-blue-700 hover:text-white"
+                    >
+                        <img
+                            src={gearImg.src}
+                            alt="Dodaj telefon"
+                            class="w-4 h-4"
+                        />
+                    </button> */}
+                </div>
             )
         }
     </div>

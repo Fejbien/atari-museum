@@ -3,6 +3,7 @@ import PhoneImg from "../assets/phone.png";
 import AccessoriesImg from "../assets/accessories.png";
 import LiteratureImg from "../assets/literature.png";
 import StatsImg from "../assets/stats.png";
+import CalendarImg from "../assets/calendar.png";
 
 function SubPagesUI() {
     const subSites = [
@@ -29,6 +30,12 @@ function SubPagesUI() {
             path: "/stats",
             active: true,
             imgPath: StatsImg.src,
+        },
+        {
+            name: "Kalendarz",
+            path: "/calendar",
+            active: true,
+            imgPath: CalendarImg.src,
         },
     ];
 

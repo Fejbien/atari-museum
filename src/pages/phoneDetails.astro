@@ -50,7 +50,7 @@ const imageUrls = imageNames?.map((imageName: string) => {
     <div class="h-screen pt-12 pb-8">
         <div class="flex flex-row min-h-full justify-center w-full h-full">
             <div
-                class="bg-white border-[3px] border-black flex flex-col m-4 min-w-80 w-auto max-w-96 h-full"
+                class="bg-white border-[3px] border-black flex flex-col m-4 min-w-80 w-auto max-w-96 h-fit max-h-full"
             >
                 <div
                     class="bg-mainBgDark text-lg p-2 font-bold font-pixeledFont flex flex-row justify-between items-center"
@@ -72,8 +72,7 @@ const imageUrls = imageNames?.map((imageName: string) => {
                     }
                 </div>
                 <div
-                    class="flex flex-col [&>*:nth-child(odd)]:bg-slate-200 [&>*:nth-child(even)]:bg-slate-300 overflow-y-scroll max-h-[92dvh]"
-                    style="overflow-y: overlay;"
+                    class="flex flex-col [&>*:nth-child(odd)]:bg-slate-200 [&>*:nth-child(even)]:bg-slate-300 overflow-y-scroll h-full betterScroll"
                 >
                     <p class="p-2">
                         <span class="font-bold">id:</span>
@@ -169,4 +168,26 @@ const imageUrls = imageNames?.map((imageName: string) => {
             </div>
         </div>
     </div>
+    <style>
+        .betterScroll::-webkit-scrollbar {
+            width: 0.4rem;
+        }
+
+        .betterScroll::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 0px;
+            border: none;
+            padding: 0;
+        }
+
+        .betterScroll::-webkit-scrollbar-track {
+            background: #d1d1d1;
+            border-radius: 0px;
+            padding: 0;
+        }
+
+        .betterScroll::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </Layout>
