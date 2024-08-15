@@ -1,0 +1,49 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { supabase } from "../utils/supabase";
+import PhoneImageEdition from "../components/PhoneImageEdition";
+
+const { cookies, redirect } = Astro;
+
+const accessToken = cookies.get("accessToken");
+const refreshToken = cookies.get("refreshToken");
+
+if (!accessToken || !refreshToken) {
+    return redirect("/signin");
+}
+
+const params = Astro.url.searchParams;
+const id = params.get("id");
+
+const { data: imageNamesFetch, error: imagesError } = await supabase.storage
+    .from("images")
+    .list("telefony/" + id);
+
+if (imagesError) console.error(imagesError);
+
+const imageNames = imageNamesFetch?.map((image: any) => image.name) || [];
+
+const imageUrls = imageNames?.map((imageName: string) => {
+    const { data: image } = supabase.storage
+        .from("images")
+        .getPublicUrl(`telefony/${id}/${imageName}`);
+    return image.publicUrl;
+});
+
+const imageDictionary: { [key: string]: string } = {};
+imageNames.forEach((name, index) => {
+    imageDictionary[name] = imageUrls[index];
+});
+---
+
+<Layout title="Atari muzeum">
+    <div class="h-screen pt-12 pb-8 overflow-auto">
+        <PhoneImageEdition imageUrls={imageUrls} client:only="react" />
+        <a
+            href={`/phoneDetails?id=${id}`}
+            class="fixed bottom-4 right-4 bg-blue-500 text-white p-2 rounded"
+        >
+            Powrót
+        </a>
+    </div>
+</Layout>

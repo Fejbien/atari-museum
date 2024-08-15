@@ -5,6 +5,9 @@ import { supabase } from "../utils/supabase";
 
 const { cookies, redirect } = Astro;
 
+// TODO:
+// remove ability to change something in images (image edits should be done in editPhonePhotos.astro)
+
 const accessToken = cookies.get("accessToken");
 const refreshToken = cookies.get("refreshToken");
 
