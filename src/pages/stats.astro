@@ -1,0 +1,56 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { supabase } from "./../utils/supabase";
+import { Button, Table, Collapsible} from 'webcoreui/astro';
+const fetchTelefonData = async () => {
+    const {data, error} = await supabase.rpc("telefon_count");
+    if (error) {
+        console.error(error);
+    }
+    //const table = data.map((row) => [<span class="border border-3">row.model</span>, row.amount])
+    //console.log(table)
+    return data;
+}
+const telefonData = await fetchTelefonData();
+const { cookies, redirect } = Astro;
+
+const accessToken = cookies.get("accessToken");
+const refreshToken = cookies.get("refreshToken");
+
+const isLogged = accessToken && refreshToken;
+
+---
+<Layout title="Statystyki">
+    <div class="h-screen pt-12">
+        <div class="flex flex-col w-full h-full justify-left">
+            <Collapsible className="bg-white border border-black">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="border border-black" scope="col">model</th>
+                        <th class="border border-black" scope="col">ilość</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            telefonData.map((row) => (
+                                <tr>
+                                    <td class="border border-black">{row.model}</td>
+                                    <td class="border border-black">{row.amount}</td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                  </table>
+                <Button slot="on">Telefony</Button>
+                <Button slot="off">Telefony (zwiń)</Button>
+            </Collapsible>
+            <style>
+                .center table {
+                    text-align: center;
+                    color: white;
+                }
+            </style>
+        </div>
+    </div>
+</Layout>
