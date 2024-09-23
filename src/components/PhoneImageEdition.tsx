@@ -78,7 +78,7 @@ function PhoneImageEdition({
                         );
                     })}
             </div>
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-4 gap-4">
                 <button
                     className="bg-blue-500 text-white px-4 py-2 rounded-lg"
                     onClick={handleDeleteButton}
@@ -89,6 +89,7 @@ function PhoneImageEdition({
                     method="POST"
                     encType="multipart/form-data"
                     onSubmit={handleImagesSubmit}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg flex flex-row justify-between"
                 >
                     <input
                         type="file"
@@ -96,8 +97,14 @@ function PhoneImageEdition({
                         name="file-input"
                         multiple
                         accept="image/png, image/jpeg, image/gif, image/bmp, image/webp, image/tiff, image/svg+xml, image/x-icon"
+                        className="w-3/4"
                     />
-                    <button type="submit">Dodaj</button>
+                    <button
+                        type="submit"
+                        className="border-blue-900 border-l-2 flex flex-row items-center px-2"
+                    >
+                        Dodaj
+                    </button>
                 </form>
                 {/* Nie patrzec tutaj */}
                 <style
