@@ -29,10 +29,13 @@ export const POST: APIRoute = async ({
 
     if (images[0].size > 0) {
         for (const image of images) {
+            let fileName = image.name.replace(" ", "");
+            fileName = fileName.replace(/\s+/g, "");
+            console.log("Uploading image: ", fileName);
             const { data: uploadData, error: uploadError } =
                 await supabase.storage
                     .from("images")
-                    .upload("telefony/" + id + "/" + image.name, image, {
+                    .upload("telefony/" + id + "/" + fileName, image, {
                         cacheControl: "public, max-age=31536000",
                         upsert: false,
                     });

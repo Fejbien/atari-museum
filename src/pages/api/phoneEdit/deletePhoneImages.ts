@@ -28,6 +28,8 @@ export const POST: APIRoute = async ({
         ?.toString()
         .split(",");
 
+    console.log("Selected images: ", selectedImages);
+
     if (!selectedImages)
         // return redirect('/error');
         return new Response("No selected images", { status: 400 });
@@ -36,6 +38,8 @@ export const POST: APIRoute = async ({
     const { data: deletionData, error: deleteionError } = await supabase.storage
         .from("images")
         .remove(selectedImages || []);
+
+    console.log("Deletion data: ", deletionData);
 
     if (deleteionError) {
         console.log("Error deleting images: ", deleteionError);

@@ -64,7 +64,7 @@ function PhoneImageEdition({
 
     return (
         <div className="w-full h-full flex flex-col p-4">
-            <div className="h-full flex flex-row flex-wrap overflow-y-auto gap-4 p-4 border-[3px] border-black content-start bg-white">
+            <div className="h-full flex flex-row flex-wrap overflow-y-auto gap-4 p-4 border-[3px] border-black content-start bg-white betterScroll">
                 {imageUrls &&
                     imageUrls.map((url, id) => {
                         return (
@@ -99,6 +99,12 @@ function PhoneImageEdition({
                     />
                     <button type="submit">Dodaj</button>
                 </form>
+                {/* Nie patrzec tutaj */}
+                <style
+                    dangerouslySetInnerHTML={{
+                        __html: "\n        .betterScroll::-webkit-scrollbar {\n            width: 0.4rem;\n        }\n\n        .betterScroll::-webkit-scrollbar-thumb {\n            background-color: #888;\n            border-radius: 0px;\n            border: none;\n            padding: 0;\n        }\n\n        .betterScroll::-webkit-scrollbar-track {\n            background: #d1d1d1;\n            border-radius: 0px;\n            padding: 0;\n        }\n\n        .betterScroll::-webkit-scrollbar-thumb:hover {\n            background: #555;\n        }\n    ",
+                    }}
+                />
             </div>
         </div>
     );
