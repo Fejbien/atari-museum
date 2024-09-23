@@ -14,6 +14,17 @@ const { cookies, redirect } = Astro;
 const accessToken = cookies.get("accessToken");
 const refreshToken = cookies.get("refreshToken");
 
+if (accessToken || refreshToken) {
+    const { data: userAuth, error: userAuthError } =
+        await supabase.auth.getUser(accessToken?.value);
+
+    if (userAuthError || userAuth.user?.role == undefined) {
+        cookies.delete("accessToken");
+        cookies.delete("refreshToken");
+        return redirect("/signin");
+    }
+}
+
 const isLogged = accessToken && refreshToken;
 
 const params = Astro.url.searchParams;
