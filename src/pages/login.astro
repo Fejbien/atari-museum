@@ -19,8 +19,16 @@ if (accessToken && refreshToken) {
                 class="mt-10 bg-white border-[3px] border-black p-10 flex flex-col justify-center items-center h-fit"
             >
                 <LoginUI client:load />
-                <form action="/api/auth/signin" method="post">
-                    <button value="google" name="provider" type="submit"
+                <form
+                    action="/api/auth/signin"
+                    method="post"
+                    class="flex flex-row w-full h-full justify-center p-2"
+                >
+                    <button
+                        value="google"
+                        name="provider"
+                        type="submit"
+                        class="shadow bg-red-500 hover:bg-red-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded w-3/4"
                         >Zaloguj z google</button
                     >
                 </form>
