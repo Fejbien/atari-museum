@@ -15,7 +15,16 @@ if (accessToken && refreshToken) {
 <Layout title="Logowanie">
     <div class="h-screen pt-12">
         <div class="flex flex-row w-full h-full justify-center">
-            <LoginUI client:load />
+            <div
+                class="mt-10 bg-white border-[3px] border-black p-10 flex flex-col justify-center items-center h-fit"
+            >
+                <LoginUI client:load />
+                <form action="/api/auth/signin" method="post">
+                    <button value="google" name="provider" type="submit"
+                        >Zaloguj z google</button
+                    >
+                </form>
+            </div>
         </div>
     </div>
 </Layout>
