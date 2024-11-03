@@ -10,7 +10,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
 
     const validProviders = ["google", "github", "discord"];
 
-    console.log("ty kurwo");
+    console.log(validProviders);
 
     if (provider && validProviders.includes(provider)) {
         const { data, error } = await supabase.auth.signInWithOAuth({
@@ -19,6 +19,8 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
                 redirectTo: "/api/auth/callback",
             },
         });
+
+        console.log(data);
 
         if (error) {
             return new Response(error.message, { status: 500 });
