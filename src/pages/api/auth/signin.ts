@@ -10,6 +10,8 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
 
     const validProviders = ["google", "github", "discord"];
 
+    console.log("ty kurwo");
+
     if (provider && validProviders.includes(provider)) {
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: provider as Provider,
