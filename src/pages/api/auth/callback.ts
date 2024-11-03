@@ -4,6 +4,7 @@ import { type APIRoute } from "astro";
 export const GET: APIRoute = async ({ request, cookies, redirect }) => {
     const requestUrl = new URL(request.url);
     const code = requestUrl.searchParams.get("code");
+    console.log("success");
     const next = requestUrl.searchParams.get("next") || "/";
 
     if (code) {
@@ -31,6 +32,8 @@ export const GET: APIRoute = async ({ request, cookies, redirect }) => {
         if (!error) {
             return redirect(next);
         }
+
+        console.log(supabase);
     }
 
     // return the user to an error page with instructions
