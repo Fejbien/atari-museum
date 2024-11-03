@@ -1,42 +1,33 @@
-import { createServerClient, parseCookieHeader } from "@supabase/ssr";
 import { type APIRoute } from "astro";
+import { supabase } from "../../../utils/supabase";
 
-export const GET: APIRoute = async ({ request, cookies, redirect }) => {
-    const requestUrl = new URL(request.url);
-    const code = requestUrl.searchParams.get("code");
-    const next = requestUrl.searchParams.get("next") || "/";
+export const GET: APIRoute = async ({ url, cookies, redirect }) => {
+    const authCode = url.searchParams.get("code");
 
-    console.log("callbackl");
-
-    if (code) {
-        const supabase = createServerClient(
-            import.meta.env.SUPABASE_URL,
-            import.meta.env.SUPABASE_API_KEY,
-            {
-                cookies: {
-                    getAll() {
-                        return parseCookieHeader(
-                            request.headers.get("Cookie") ?? ""
-                        );
-                    },
-                    setAll(cookiesToSet) {
-                        cookiesToSet.forEach(({ name, value, options }) =>
-                            cookies.set(name, value, options)
-                        );
-                    },
-                },
-            }
-        );
-
-        const { error } = await supabase.auth.exchangeCodeForSession(code);
-
-        if (!error) {
-            return redirect(next);
-        }
-
-        console.log(supabase);
+    if (!authCode) {
+        return new Response("No code provided", { status: 400 });
     }
 
-    // return the user to an error page with instructions
-    return redirect("/auth/auth-code-error");
+    const { data, error } = await supabase.auth.exchangeCodeForSession(
+        authCode
+    );
+
+    if (error) {
+        return new Response(error.message, { status: 500 });
+    }
+
+    const { access_token, refresh_token } = data.session;
+
+    cookies.set("sb-access-token", access_token, {
+        path: "/",
+        secure: true,
+        httpOnly: true,
+    });
+    cookies.set("sb-refresh-token", refresh_token, {
+        path: "/",
+        secure: true,
+        httpOnly: true,
+    });
+
+    return redirect("/");
 };
