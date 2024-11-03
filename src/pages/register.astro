@@ -1,6 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import RegisterUI from "../components/Register";
+
+const { cookies, redirect } = Astro;
+
+const accessToken = cookies.get("accessToken");
+const refreshToken = cookies.get("refreshToken");
+
+if (accessToken && refreshToken) {
+    return redirect("/");
+}
 ---
 
 <Layout title="Rejestracja">

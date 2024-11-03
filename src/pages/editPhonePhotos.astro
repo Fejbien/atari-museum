@@ -3,20 +3,40 @@ import Layout from "../layouts/Layout.astro";
 import { supabase } from "../utils/supabase";
 import PhoneImageEdition from "../components/PhoneImageEdition";
 
-const { cookies, redirect } = Astro;
+const { cookies } = Astro;
 
 const accessToken = cookies.get("accessToken");
 const refreshToken = cookies.get("refreshToken");
 
-if (accessToken || refreshToken) {
-    const { data: userAuth, error: userAuthError } =
-        await supabase.auth.getUser(accessToken?.value);
+if (!accessToken || !refreshToken) {
+    return Astro.redirect("/login");
+}
 
-    if (userAuthError || userAuth.user?.role == undefined) {
-        cookies.delete("accessToken");
-        cookies.delete("refreshToken");
-        return redirect("/signin");
+let session;
+try {
+    session = await supabase.auth.setSession({
+        refresh_token: refreshToken.value,
+        access_token: accessToken.value,
+    });
+
+    if (session.error) {
+        Astro.cookies.delete("accessToken", {
+            path: "/",
+        });
+        Astro.cookies.delete("refreshToken", {
+            path: "/",
+        });
+        return Astro.redirect("/login");
     }
+} catch (error) {
+    Astro.cookies.delete("accessToken", {
+        path: "/",
+    });
+    Astro.cookies.delete("refreshToken", {
+        path: "/",
+    });
+
+    return Astro.redirect("/login");
 }
 
 const params = Astro.url.searchParams;

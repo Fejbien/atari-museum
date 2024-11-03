@@ -1,38 +1,46 @@
 ---
+import { undefined } from "astro:schema";
 import { supabase } from "../utils/supabase";
 
-const { cookies, redirect } = Astro;
+const { cookies } = Astro;
 
 const accessToken = cookies.get("accessToken");
 const refreshToken = cookies.get("refreshToken");
 
-let email = "Unknown";
+let session;
 if (accessToken && refreshToken) {
-    const { data, error } = await supabase.auth.setSession({
+try {
+    session = await supabase.auth.setSession({
         refresh_token: refreshToken.value,
         access_token: accessToken.value,
     });
 
-    if (error) {
-        console.error(error);
-        cookies.delete("accessToken", { path: "/" });
-        cookies.delete("refreshToken", { path: "/" });
-        console.log("Deleted cookies due to an error above.");
-        // cookies.delete("accessToken", {
-        //     path: "/",
-        // });
-        // cookies.delete("refreshToken", {
-        //     path: "/",
-        // });
+    if (session.error) {
+        Astro.cookies.delete("accessToken", {
+        path: "/",
+        });
+        Astro.cookies.delete("refreshToken", {
+        path: "/",
+        });
 
-        // return redirect("/signin");
+        // return Astro.redirect("/login");
     }
-
-    email = data?.user?.email || "Unknown";
+} catch (error) {
+    Astro.cookies.delete("accessToken", {
+        path: "/",
+    });
+    Astro.cookies.delete("refreshToken", {
+        path: "/",
+    });
+    
+    // return Astro.redirect("/login");
+}
 }
 
+const email = session?.data.user?.email;
+
 // Show header signin text only if not on signin or register page
-const show = !(Astro.url.pathname === "/signin" || Astro.url.pathname === "/register");
+const show = !(Astro.url.pathname === "/login" || Astro.url.pathname === "/register");
 ---
 
 <div
@@ -43,7 +51,7 @@ const show = !(Astro.url.pathname === "/signin" || Astro.url.pathname === "/regi
     </h1>
     <div class="flex flex-row mr-2">
         {
-            show && (email === "Unknown" ? (
+            show && (!email ? (
                 <a href="/login" class="font-pixeledFont text-xl">Zaloguj</a>
             ) : (
                 

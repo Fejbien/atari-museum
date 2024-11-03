@@ -2,19 +2,38 @@
 import Layout from "../layouts/Layout.astro";
 import { supabase } from "../utils/supabase";
 
-const { cookies, redirect } = Astro;
+const { cookies } = Astro;
 
 const accessToken = cookies.get("accessToken");
 const refreshToken = cookies.get("refreshToken");
 
-if (accessToken || refreshToken) {
-    const { data: userAuth, error: userAuthError } =
-        await supabase.auth.getUser(accessToken?.value);
+let session;
+if (accessToken && refreshToken) {
+    try {
+        session = await supabase.auth.setSession({
+            refresh_token: refreshToken.value,
+            access_token: accessToken.value,
+        });
 
-    if (userAuthError || userAuth.user?.role == undefined) {
-        cookies.delete("accessToken");
-        cookies.delete("refreshToken");
-        return redirect("/signin");
+        if (session.error) {
+            Astro.cookies.delete("accessToken", {
+                path: "/",
+            });
+            Astro.cookies.delete("refreshToken", {
+                path: "/",
+            });
+
+            // return Astro.redirect("/login");
+        }
+    } catch (error) {
+        Astro.cookies.delete("accessToken", {
+            path: "/",
+        });
+        Astro.cookies.delete("refreshToken", {
+            path: "/",
+        });
+
+        // return Astro.redirect("/login");
     }
 }
 ---
