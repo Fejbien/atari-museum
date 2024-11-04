@@ -1,10 +1,9 @@
 import React from "react";
 import binIcon from "../assets/binIcon.svg";
 
-// TODO:
-// - Better confirmation dialog
-// - Chip showing deletion information
-// - Add permission based deletion (only for admins)
+// TODO Better confirmation dialog
+// TODO Chip showing deletion information
+// TODO Add permission based deletion (only for admins)
 
 function DeletionButton({ id }: { id: number }) {
     const handleDelete = () => {

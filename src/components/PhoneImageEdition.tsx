@@ -1,10 +1,8 @@
 import { useState, type FormEvent, type FormEventHandler } from "react";
 
-// TODO:
-// Add button to delete selected images
-// Add button to upload new images
-// Add chip showing what was done
-// :D
+// TODO Add button to delete selected images
+// TODO Add button to upload new images
+// TODO Add chip showing what was done
 
 function PhoneImageEdition({
     imageUrls,

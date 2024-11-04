@@ -1,12 +1,11 @@
 import { useState } from "react";
 
-// TODO:
-// - Add fixed button to edit images (add, remove)
-// - Add state which changes what does clicking image do (full screen, edit)
-// - When in edit state every image top right corner will have a checkbox to select it
-// - When in edit state there will be a button to remove selected images
-// - When in edit state there will be a button to add new images
-// - Add loading state for images
+// TODO Add fixed button to edit images (add, remove)
+// TODO Add state which changes what does clicking image do (full screen, edit)
+// TODO When in edit state every image top right corner will have a checkbox to select it
+// TODO When in edit state there will be a button to remove selected images
+// TODO When in edit state there will be a button to add new images
+// TODO Add loading state for images
 
 function PhoneImageGallery({ imageUrls }: { imageUrls: string[] }) {
     return (

@@ -3,11 +3,6 @@ import Layout from "../layouts/Layout.astro";
 import SubPagesRenderer from "../components/SubPagesRenderer";
 import { supabase } from "../utils/supabase";
 
-// TODO:
-// - Add auth listener
-// - Add auth state to the header
-// - Fix auth :D
-
 const { cookies } = Astro;
 
 const accessToken = cookies.get("accessToken");
