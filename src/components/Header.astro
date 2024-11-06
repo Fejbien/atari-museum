@@ -40,13 +40,22 @@ const email = session?.data.user?.email;
 
 // Show header signin text only if not on signin or register page
 const show = !(Astro.url.pathname === "/login" || Astro.url.pathname === "/register");
+
+const pageBack: { [key: string]: string } = {
+    "/phoneDetails": "/phones",
+    "/addPhone": "/phones",
+    "/phoneEdit": "/phoneDetails" + Astro.url.search,
+    "/editPhonePhotos": "/phoneDetails" + Astro.url.search,
+};
+
+const back = pageBack[Astro.url.pathname] ? pageBack[Astro.url.pathname] : "/";
 ---
 
 <div
     class="w-full h-12 bg-white pt-1 pl-2 pb-1 border-b-black border-b-[3px] flex flex-row items-center justify-between fixed"
 >
     <h1 class="font-pixeledFont text-2xl font-bold">
-        <a href="/">ATARI Muzeum</a>
+        <a href={back}>ATARI Muzeum</a>
     </h1>
     <div class="flex flex-row mr-2">
         {
