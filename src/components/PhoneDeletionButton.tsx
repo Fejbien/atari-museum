@@ -3,7 +3,6 @@ import binIcon from "../assets/binIcon.svg";
 
 // TODO Better confirmation dialog
 // TODO Chip showing deletion information
-// TODO Add permission based deletion (only for admins)
 
 function DeletionButton({ id }: { id: number }) {
     const handleDelete = () => {
@@ -27,7 +26,7 @@ function DeletionButton({ id }: { id: number }) {
                         }, 2000);
                     } else if (res.status === 401) {
                         window.alert("Unauthorized");
-                        window.location.replace("/signin");
+                        window.location.replace("/login");
                     } else {
                         console.error(
                             "Error deleting phone entry:",

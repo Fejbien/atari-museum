@@ -22,7 +22,7 @@ function RegisterUI() {
         });
 
         if (response.ok) {
-            window.location.replace("/signin");
+            window.location.replace("/login");
         } else {
             const errorDetails = await response.text();
             switch (errorDetails) {

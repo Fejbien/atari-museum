@@ -12,6 +12,7 @@ const accessToken = cookies.get("accessToken");
 const refreshToken = cookies.get("refreshToken");
 
 let session;
+let isAdmin = false;
 if (accessToken && refreshToken) {
     try {
         session = await supabase.auth.setSession({
@@ -29,6 +30,16 @@ if (accessToken && refreshToken) {
 
             // return Astro.redirect("/login");
         }
+
+        // Admin check Start
+        const { data: adminCheck, error: adminError } = await supabase
+            .from("admins")
+            .select("admin_id")
+            .eq("admin_id", session.data.user?.id)
+            .single();
+
+        isAdmin = adminCheck !== null;
+        // Admin check END
     } catch (error) {
         Astro.cookies.delete("accessToken", {
             path: "/",
@@ -87,7 +98,7 @@ const imageUrls = imageNames?.map((imageName: string) => {
                 >
                     <h1 class="text-2xl">{data.producent} {data.model}</h1>
                     {
-                        isLogged && (
+                        isLogged && isAdmin && (
                             <div class="flex flex-row p-0 m-0 justify-center items-center">
                                 <a href={`/phoneEdit?id=${data.id}`}>
                                     <img
@@ -197,7 +208,7 @@ const imageUrls = imageNames?.map((imageName: string) => {
                 <PhoneImageGallery imageUrls={imageUrls} client:only="react" />
             </div>
             {
-                isLogged && (
+                isLogged && isAdmin && (
                     <a
                         href={`/editPhonePhotos?id=${data.id}`}
                         class="fixed bottom-4 right-4 bg-blue-500 text-white p-2 rounded"
