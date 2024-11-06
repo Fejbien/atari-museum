@@ -3,21 +3,56 @@ import Layout from "../layouts/Layout.astro";
 import CountryPicker from "../components/CountryPicker.astro";
 import { supabase } from "../utils/supabase";
 
-const { cookies, redirect } = Astro;
+const { cookies } = Astro;
 
 const accessToken = cookies.get("accessToken");
 const refreshToken = cookies.get("refreshToken");
 
-if (accessToken || refreshToken) {
-    const { data: userAuth, error: userAuthError } =
-        await supabase.auth.getUser(accessToken?.value);
-
-    if (userAuthError || userAuth.user?.role == undefined) {
-        cookies.delete("accessToken");
-        cookies.delete("refreshToken");
-        return redirect("/signin");
-    }
+if (!accessToken || !refreshToken) {
+    return Astro.redirect("/login");
 }
+
+let session;
+try {
+    session = await supabase.auth.setSession({
+        refresh_token: refreshToken.value,
+        access_token: accessToken.value,
+    });
+
+    if (session.error) {
+        Astro.cookies.delete("accessToken", {
+            path: "/",
+        });
+        Astro.cookies.delete("refreshToken", {
+            path: "/",
+        });
+        return Astro.redirect("/login");
+    }
+} catch (error) {
+    Astro.cookies.delete("accessToken", {
+        path: "/",
+    });
+    Astro.cookies.delete("refreshToken", {
+        path: "/",
+    });
+
+    return Astro.redirect("/login");
+}
+
+// Admin check Start
+const { data: adminCheck, error: adminError } = await supabase
+    .from("admins")
+    .select("admin_id")
+    .eq("admin_id", session.data.user?.id)
+    .single();
+
+//console.log("Admin error:", adminError);
+//console.log("Is Admin:", isAdmin);
+if (adminError) return new Response("Unauthorized", { status: 401 });
+const isAdmin = adminCheck !== null;
+if (!isAdmin) return new Response("Unauthorized", { status: 401 });
+// Admin check END
+
 // const { data, error } = await supabase.auth.getUser(accessToken.value);
 // console.log(data.user?.role);
 

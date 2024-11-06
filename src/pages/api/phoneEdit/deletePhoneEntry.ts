@@ -16,11 +16,24 @@ export const POST: APIRoute = async ({
 
     const { data: userAuth, error: userAuthError } =
         await supabase.auth.getUser(accessToken.value);
-    console.log(userAuth.user?.role);
 
     if (userAuthError)
         // return redirect("/signin");
         return new Response("Unauthorized", { status: 401 });
+
+    // Admin check Start
+    const { data: adminCheck, error: adminError } = await supabase
+        .from("admins")
+        .select("admin_id")
+        .eq("admin_id", userAuth.user?.id)
+        .single();
+
+    //console.log("Admin error:", adminError);
+    //console.log("Is Admin:", isAdmin);
+    if (adminError) return new Response("Unauthorized", { status: 401 });
+    const isAdmin = adminCheck !== null;
+    if (!isAdmin) return new Response("Unauthorized", { status: 401 });
+    // Admin check END
 
     const data = await request.formData();
     const id = data.get("id");

@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import PhoneEntry from "../components/PhoneEntry";
 import { supabase } from "./../utils/supabase";
 import type { PhoneData } from "../utils/interface/PhoneData";
-import gearImg from "../assets/gear.png";
+//import gearImg from "../assets/gear.png";
 
 const { data, error } = await supabase.from("telefony").select();
 
@@ -15,6 +15,7 @@ const accessToken = cookies.get("accessToken");
 const refreshToken = cookies.get("refreshToken");
 
 let session;
+let isAdmin = false;
 if (accessToken && refreshToken) {
     try {
         session = await supabase.auth.setSession({
@@ -32,6 +33,16 @@ if (accessToken && refreshToken) {
 
             // return Astro.redirect("/login");
         }
+
+        // Admin check Start
+        const { data: adminCheck, error: adminError } = await supabase
+            .from("admins")
+            .select("admin_id")
+            .eq("admin_id", session.data.user?.id)
+            .single();
+
+        isAdmin = adminCheck !== null;
+        // Admin check END
     } catch (error) {
         Astro.cookies.delete("accessToken", {
             path: "/",
@@ -70,7 +81,7 @@ const isLogged = accessToken && refreshToken;
             </div>
         </div>
         {
-            isLogged && (
+            isLogged && isAdmin && (
                 <div class="fixed bottom-4 right-4">
                     <a
                         href="/addPhone"

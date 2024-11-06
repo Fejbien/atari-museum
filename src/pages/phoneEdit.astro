@@ -5,8 +5,6 @@ import { supabase } from "../utils/supabase";
 
 const { cookies } = Astro;
 
-// TODO Zmieniajac checkboxy na nie nie zmienia sie wartosc w bazie
-
 const accessToken = cookies.get("accessToken");
 const refreshToken = cookies.get("refreshToken");
 
@@ -40,6 +38,20 @@ try {
 
     return Astro.redirect("/login");
 }
+
+// Admin check Start
+const { data: adminCheck, error: adminError } = await supabase
+    .from("admins")
+    .select("admin_id")
+    .eq("admin_id", session.data.user?.id)
+    .single();
+
+//console.log("Admin error:", adminError);
+//console.log("Is Admin:", isAdmin);
+if (adminError) return new Response("Unauthorized", { status: 401 });
+const isAdmin = adminCheck !== null;
+if (!isAdmin) return new Response("Unauthorized", { status: 401 });
+// Admin check END
 
 const params = Astro.url.searchParams;
 const id = params.get("id");
@@ -238,6 +250,11 @@ imageNames.forEach((name, index) => {
                                 <div class="md:w-1/3"></div>
                                 <label class="md:w-2/3 block font-bold">
                                     <input
+                                        type="hidden"
+                                        name="sprawny"
+                                        value="false"
+                                    />
+                                    <input
                                         class="mr-2 leading-tight"
                                         type="checkbox"
                                         name="sprawny"
@@ -388,6 +405,11 @@ imageNames.forEach((name, index) => {
                                 <div class="md:w-1/3"></div>
                                 <label class="md:w-2/3 block font-bold">
                                     <input
+                                        type="hidden"
+                                        name="opakowanie"
+                                        value="false"
+                                    />
+                                    <input
                                         class="mr-2 leading-tight"
                                         type="checkbox"
                                         name="opakowanie"
@@ -520,12 +542,18 @@ imageNames.forEach((name, index) => {
                                 <div class="md:w-1/3"></div>
                                 <label class="md:w-2/3 block font-bold">
                                     <input
+                                        type="hidden"
+                                        name="posiadany"
+                                        value="false"
+                                    />
+                                    <input
                                         class="mr-2 leading-tight"
                                         type="checkbox"
                                         name="posiadany"
                                         checked={phoneData.posiadany
                                             ? true
                                             : false}
+                                        onchange=""
                                     />
                                     <span class="text-sm">Posiadany</span>
                                 </label>
