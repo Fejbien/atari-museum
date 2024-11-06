@@ -5,7 +5,6 @@ function LoginUI() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("submit");
         const formData = new FormData(e.target as HTMLFormElement);
 
         let dataVals: { [key: string]: any } = {};

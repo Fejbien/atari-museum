@@ -9,18 +9,14 @@ export const POST: APIRoute = async ({
     const accessToken = cookies.get("accessToken");
     const refreshToken = cookies.get("refreshToken");
 
-    if (!accessToken || !refreshToken) {
-        // return redirect("/signin");
+    if (!accessToken || !refreshToken)
         return new Response("Unauthorized", { status: 401 });
-    }
 
     const { data: userAuth, error: userAuthError } =
         await supabase.auth.getUser(accessToken.value);
     console.log(userAuth.user?.role);
 
-    if (userAuthError)
-        // return redirect("/signin");
-        return new Response("Unauthorized", { status: 401 });
+    if (userAuthError) return new Response("Unauthorized", { status: 401 });
 
     // Admin check Start
     const { data: adminCheck, error: adminError } = await supabase
@@ -29,8 +25,6 @@ export const POST: APIRoute = async ({
         .eq("admin_id", userAuth.user?.id)
         .single();
 
-    //console.log("Admin error:", adminError);
-    //console.log("Is Admin:", isAdmin);
     if (adminError) return new Response("Unauthorized", { status: 401 });
     const isAdmin = adminCheck !== null;
     if (!isAdmin) return new Response("Unauthorized", { status: 401 });
@@ -59,6 +53,5 @@ export const POST: APIRoute = async ({
         }
     }
 
-    // return redirect('/');
     return new Response(`Success deleteing selected images`, { status: 200 });
 };

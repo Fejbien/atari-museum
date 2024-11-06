@@ -9,17 +9,12 @@ export const POST: APIRoute = async ({
     const accessToken = cookies.get("accessToken");
     const refreshToken = cookies.get("refreshToken");
 
-    if (!accessToken || !refreshToken) {
-        // return redirect("/signin");
+    if (!accessToken || !refreshToken)
         return new Response("Unauthorized", { status: 401 });
-    }
-
     const { data: userAuth, error: userAuthError } =
         await supabase.auth.getUser(accessToken.value);
 
-    if (userAuthError)
-        // return redirect("/signin");
-        return new Response("Unauthorized", { status: 401 });
+    if (userAuthError) return new Response("Unauthorized", { status: 401 });
 
     // Admin check Start
     const { data: adminCheck, error: adminError } = await supabase
@@ -28,8 +23,6 @@ export const POST: APIRoute = async ({
         .eq("admin_id", userAuth.user?.id)
         .single();
 
-    //console.log("Admin error:", adminError);
-    //console.log("Is Admin:", isAdmin);
     if (adminError) return new Response("Unauthorized", { status: 401 });
     const isAdmin = adminCheck !== null;
     if (!isAdmin) return new Response("Unauthorized", { status: 401 });
@@ -53,13 +46,11 @@ export const POST: APIRoute = async ({
         .from("images")
         .list(`telefony/${id}`);
 
-    if (list?.length === 0) {
-        // return redirect('/');
+    if (list?.length === 0)
         return new Response(
             "Phone entry deleted successfully (No image was found!)",
             { status: 200 }
         );
-    }
 
     if (listError) {
         console.error("Error listing images:", listError);
@@ -76,6 +67,5 @@ export const POST: APIRoute = async ({
         return new Response("Error deleting image", { status: 500 });
     }
 
-    // return redirect('/');
     return new Response(`Phone entry deleted successfully`, { status: 200 });
 };

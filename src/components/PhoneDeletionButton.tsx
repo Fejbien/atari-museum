@@ -26,7 +26,7 @@ function DeletionButton({ id }: { id: number }) {
                         }, 2000);
                     } else if (res.status === 401) {
                         window.alert("Unauthorized");
-                        window.location.replace("/login");
+                        //window.location.replace("/login");
                     } else {
                         console.error(
                             "Error deleting phone entry:",
