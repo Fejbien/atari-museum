@@ -55,6 +55,13 @@ function Phones() {
         }));
     }, [debouncedFilters]);
 
+    const handlePrevPage = () => {
+        if (page > 1) setPage(page - 1);
+    };
+    const handleNextPage = () => {
+        if (page < totalPages) setPage(page + 1);
+    };
+
     // Update fetch with filters
     useEffect(() => {
         const params = new URLSearchParams({
@@ -76,6 +83,7 @@ function Phones() {
                 setTotalPages(data.pagination.totalPages);
             });
     }, [page, limit, filters]);
+
     return (
         <div className="flex justify-center flex-row h-full">
             <div className="flex flex-col w-1/6 p-4 bg-white border-[3px] border-black m-4 h-full">
@@ -93,6 +101,25 @@ function Phones() {
                         <option value={16}>16</option>
                         <option value={32}>32</option>
                     </select>
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                    <button
+                        onClick={handlePrevPage}
+                        disabled={page === 1}
+                        className="px-3 py-2 bg-gray-200 rounded-md disabled:opacity-50"
+                    >
+                        <span>&lt;</span>
+                    </button>
+                    <span>
+                        Strona {page} z {totalPages}
+                    </span>
+                    <button
+                        onClick={handleNextPage}
+                        disabled={page === totalPages}
+                        className="px-3 py-2 bg-gray-200 rounded-md disabled:opacity-50"
+                    >
+                        <span>&gt;</span>
+                    </button>
                 </div>
                 <div className="mt-6 space-y-4">
                     <h2 className="text-lg font-semibold">Filtry</h2>
