@@ -1,10 +1,5 @@
 import { useState } from "react";
 
-// TODO Add fixed button to edit images (add, remove)
-// TODO Add state which changes what does clicking image do (full screen, edit)
-// TODO When in edit state every image top right corner will have a checkbox to select it
-// TODO When in edit state there will be a button to remove selected images
-// TODO When in edit state there will be a button to add new images
 // TODO Add loading state for images
 
 function PhoneImageGallery({ imageUrls }: { imageUrls: string[] }) {
@@ -27,6 +22,7 @@ function SingleImage({ imageUrl }: { imageUrl: string }) {
                 src={imageUrl}
                 alt="image"
                 className="max-h-80 w-auto border-[3px] border-black"
+                loading="lazy"
                 onClick={() => {
                     setIsFullPage(true);
                 }}

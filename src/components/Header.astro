@@ -8,37 +8,31 @@ const refreshToken = cookies.get("refreshToken");
 
 let session;
 if (accessToken && refreshToken) {
-try {
-    session = await supabase.auth.setSession({
-        refresh_token: refreshToken.value,
-        access_token: accessToken.value,
-    });
+    try {
+        session = await supabase.auth.setSession({
+            refresh_token: refreshToken.value,
+            access_token: accessToken.value,
+        });
 
-    if (session.error) {
+        if (session.error) {
+            Astro.cookies.delete("accessToken", {
+            path: "/",
+            });
+            Astro.cookies.delete("refreshToken", {
+            path: "/",
+            });
+        }
+    } catch (error) {
         Astro.cookies.delete("accessToken", {
-        path: "/",
+            path: "/",
         });
         Astro.cookies.delete("refreshToken", {
-        path: "/",
+            path: "/",
         });
-
-        // return Astro.redirect("/login");
     }
-} catch (error) {
-    Astro.cookies.delete("accessToken", {
-        path: "/",
-    });
-    Astro.cookies.delete("refreshToken", {
-        path: "/",
-    });
-    
-    // return Astro.redirect("/login");
-}
 }
 
 const email = session?.data.user?.email;
-
-// Show header signin text only if not on signin or register page
 const show = !(Astro.url.pathname === "/login" || Astro.url.pathname === "/register");
 
 const pageBack: { [key: string]: string } = {

@@ -107,7 +107,7 @@ const imageUrls = imageNames?.map((imageName: string) => {
                                         alt="Link Icon"
                                     />
                                 </a>
-                                <PhoneDeletion id={data.id} client:load />
+                                <PhoneDeletion client:load id={data.id} />
                             </div>
                         )
                     }
@@ -205,7 +205,7 @@ const imageUrls = imageNames?.map((imageName: string) => {
             <div
                 class="h-full w-full flex flex-row flex-wrap overflow-y-auto gap-4 p-4 m-4 ml-0 border-[3px] border-black content-start bg-white betterScroll"
             >
-                <PhoneImageGallery imageUrls={imageUrls} client:only="react" />
+                <PhoneImageGallery client:load imageUrls={imageUrls} />
             </div>
             {
                 isLogged && isAdmin && (

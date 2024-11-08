@@ -9,7 +9,6 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     const provider = formData.get("provider")?.toString();
 
     const validProviders = ["google"];
-
     //console.log(validProviders);
 
     if (provider && validProviders.includes(provider)) {
@@ -51,5 +50,4 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     });
 
     return new Response("OK", { status: 200 });
-    // return redirect("/");
 };
