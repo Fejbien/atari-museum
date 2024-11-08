@@ -3,7 +3,7 @@ import type { PhoneData } from "../utils/interface/PhoneData";
 
 const PhoneEntry = ({ data }: { data: PhoneData }) => {
     return (
-        <div className="bg-white border-[3px] border-black flex flex-col min-w-80 w-[24%]">
+        <div className="bg-white border-[3px] border-black flex flex-col min-w-80 w-[24%] h-auto">
             <div className="bg-mainBgDark text-lg p-2 font-bold font-pixeledFont flex flex-row justify-between items-center">
                 <h1>
                     {data.producent} {data.model}
