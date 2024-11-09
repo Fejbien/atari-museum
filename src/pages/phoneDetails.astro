@@ -6,6 +6,21 @@ import type { PhoneData } from "../utils/interface/PhoneData";
 import PhoneDeletion from "../components/PhoneDeletionButton";
 import editIcon from "../assets/editIcon.svg";
 
+/*
+14:35:30 [ERROR] TypeError: Cannot read properties of null (reading '0')
+    at file:///var/task/.vercel/output/_functions/pages/phonedetails.astro.mjs:154:25
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async callComponentAsTemplateResultOrResponse (file:///var/task/.vercel/output/_functions/chunks/astro/server_Bz8dfJ2R.mjs:1134:25)
+    at async renderToAsyncIterable (file:///var/task/.vercel/output/_functions/chunks/astro/server_Bz8dfJ2R.mjs:1176:26)
+    at async renderPage (file:///var/task/.vercel/output/_functions/chunks/astro/server_Bz8dfJ2R.mjs:1994:24)
+    at async lastNext (file:///var/task/.vercel/output/_functions/chunks/entrypoint_HTwNvXCn.mjs:1660:25)
+    at async callMiddleware (file:///var/task/.vercel/output/_functions/chunks/entrypoint_HTwNvXCn.mjs:798:10)
+    at async RenderContext.render (file:///var/task/.vercel/output/_functions/chunks/entrypoint_HTwNvXCn.mjs:1691:22)
+    at async NodeApp.render (file:///var/task/.vercel/output/_functions/chunks/entrypoint_HTwNvXCn.mjs:2349:18)
+    at async Server.handler (file:///var/task/.vercel/output/_functions/chunks/entrypoint_HTwNvXCn.mjs:2721:29)
+
+*/
+
 const { cookies } = Astro;
 
 const accessToken = cookies.get("accessToken");
