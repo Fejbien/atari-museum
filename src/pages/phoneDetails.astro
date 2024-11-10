@@ -6,21 +6,6 @@ import type { PhoneData } from "../utils/interface/PhoneData";
 import PhoneDeletion from "../components/PhoneDeletionButton";
 import editIcon from "../assets/editIcon.svg";
 
-/*
-14:35:30 [ERROR] TypeError: Cannot read properties of null (reading '0')
-    at file:///var/task/.vercel/output/_functions/pages/phonedetails.astro.mjs:154:25
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async callComponentAsTemplateResultOrResponse (file:///var/task/.vercel/output/_functions/chunks/astro/server_Bz8dfJ2R.mjs:1134:25)
-    at async renderToAsyncIterable (file:///var/task/.vercel/output/_functions/chunks/astro/server_Bz8dfJ2R.mjs:1176:26)
-    at async renderPage (file:///var/task/.vercel/output/_functions/chunks/astro/server_Bz8dfJ2R.mjs:1994:24)
-    at async lastNext (file:///var/task/.vercel/output/_functions/chunks/entrypoint_HTwNvXCn.mjs:1660:25)
-    at async callMiddleware (file:///var/task/.vercel/output/_functions/chunks/entrypoint_HTwNvXCn.mjs:798:10)
-    at async RenderContext.render (file:///var/task/.vercel/output/_functions/chunks/entrypoint_HTwNvXCn.mjs:1691:22)
-    at async NodeApp.render (file:///var/task/.vercel/output/_functions/chunks/entrypoint_HTwNvXCn.mjs:2349:18)
-    at async Server.handler (file:///var/task/.vercel/output/_functions/chunks/entrypoint_HTwNvXCn.mjs:2721:29)
-
-*/
-
 const { cookies } = Astro;
 
 const accessToken = cookies.get("accessToken");
@@ -42,8 +27,6 @@ if (accessToken && refreshToken) {
             Astro.cookies.delete("refreshToken", {
                 path: "/",
             });
-
-            // return Astro.redirect("/login");
         }
 
         // Admin check Start
@@ -62,8 +45,6 @@ if (accessToken && refreshToken) {
         Astro.cookies.delete("refreshToken", {
             path: "/",
         });
-
-        // return Astro.redirect("/login");
     }
 }
 
@@ -72,13 +53,22 @@ const isLogged = accessToken && refreshToken;
 const params = Astro.url.searchParams;
 const id = params.get("id");
 
+if (!id) {
+    console.error("No ID provided in the URL");
+    return Astro.redirect("/phones");
+}
+
 const { data: pData, error: phoneError } = await supabase
     .from("telefony")
     .select()
     .eq("id", id);
 
-if (phoneError) console.error(phoneError);
-if (pData?.length == 0) {
+if (phoneError) {
+    console.error(phoneError);
+    return Astro.redirect("/phones");
+}
+
+if (!pData || pData.length === 0) {
     console.error("No data found for id: " + id);
     return Astro.redirect("/phones");
 }

@@ -11,6 +11,18 @@ interface CacheItem {
 const cache = new Map<string, CacheItem>();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
+supabase
+    .channel("public:telefony")
+    .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "telefony" },
+        () => {
+            console.log("Data changed, clearing cache...");
+            cache.clear();
+        }
+    )
+    .subscribe();
+
 export const GET: APIRoute = async ({ request }): Promise<Response> => {
     const url = new URL(request.url);
     const limit = parseInt(url.searchParams.get("limit") || "10");
