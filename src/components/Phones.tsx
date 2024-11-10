@@ -173,9 +173,9 @@ function Phones() {
                         }
                         className="w-full p-2 border rounded"
                     >
-                        <option value="">Stan (wszystkie)</option>
-                        <option value="nowy">Nowy</option>
-                        <option value="używany">Używany</option>
+                        <option value="">Stan: (wszystkie)</option>
+                        <option value="nowy">Stan: Nowy</option>
+                        <option value="używany">Stan: Używany</option>
                     </select>
 
                     <select
@@ -188,7 +188,7 @@ function Phones() {
                         }
                         className="w-full p-2 border rounded"
                     >
-                        <option value="">-- Wybierz kraj --</option>
+                        <option value="">Kraje: (Wszystkie)</option>
                         {countries.map((country: any) => (
                             <option key={country.code} value={country.code}>
                                 {country.flag} {country.name}
@@ -213,9 +213,9 @@ function Phones() {
                         }
                         className="w-full p-2 border rounded"
                     >
-                        <option value="">Sprawny (wszystko)</option>
-                        <option value="true">Tak</option>
-                        <option value="false">Nie</option>
+                        <option value="">Sprawny: (wszystko)</option>
+                        <option value="true">Sprawny: Tak</option>
+                        <option value="false">Sprawny: Nie</option>
                     </select>
 
                     <select
@@ -235,9 +235,9 @@ function Phones() {
                         }
                         className="w-full p-2 border rounded"
                     >
-                        <option value="">Opakowanie (wszystko)</option>
-                        <option value="true">Tak</option>
-                        <option value="false">Nie</option>
+                        <option value="">Opakowanie: (wszystko)</option>
+                        <option value="true">Opakowanie: Tak</option>
+                        <option value="false">Opakowanie: Nie</option>
                     </select>
 
                     <select
@@ -257,9 +257,9 @@ function Phones() {
                         }
                         className="w-full p-2 border rounded"
                     >
-                        <option value="">Posiadany (wszystko)</option>
-                        <option value="true">Tak</option>
-                        <option value="false">Nie</option>
+                        <option value="">Posiadany: (wszystko)</option>
+                        <option value="true">Posiadany: Tak</option>
+                        <option value="false">Posiadany: Nie</option>
                     </select>
 
                     <button
@@ -287,7 +287,6 @@ function Phones() {
                 </div>
             </div>
 
-            {/* Phone list */}
             <div className="flex flex-row w-full h-full gap-4 flex-wrap 2xl overflow-y-auto mt-4">
                 {fetchedData?.map((item) => (
                     <PhoneEntry key={item.id} data={item} />
