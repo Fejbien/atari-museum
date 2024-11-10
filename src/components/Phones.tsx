@@ -35,6 +35,7 @@ function Phones() {
         kraj: "",
         jezyk: "",
         simlock: "",
+        rok_produkcji: "",
     });
 
     const [filters, setFilters] = useState({
@@ -84,14 +85,39 @@ function Phones() {
             });
     }, [page, limit, filters]);
 
+    const scrollbarStyles = {
+        scrollbarWidth: "thin",
+        scrollbarColor: "#888888 #f1f1f1",
+
+        "&::-webkit-scrollbar": {
+            width: "6px",
+        },
+
+        "&::-webkit-scrollbar-track": {
+            background: "#f1f1f1",
+            borderRadius: "10px",
+        },
+
+        "&::-webkit-scrollbar-thumb": {
+            background: "#888888",
+            borderRadius: "10px",
+        },
+
+        "&::-webkit-scrollbar-thumb:hover": {
+            background: "#555555",
+        },
+    };
+
     return (
         <div className="flex justify-center flex-row h-full">
-            <div className="flex flex-col w-1/6 p-4 bg-white border-[3px] border-black m-4 h-full">
-                <h1 className="text-3xl font-bold">Telefony</h1>
-                <div className="mt-4">
+            <div className="flex flex-col w-1/6 py-4 bg-white border-[3px] border-black m-4 h-full relative">
+                <h1 className="text-3xl font-bold px-4">Telefony</h1>
+                <div className="mt-4 px-4">
                     <label className="block text-sm font-medium text-gray-700">
                         Ilosc telefonow na stronie
                     </label>
+                </div>
+                <div className="px-4">
                     <select
                         value={limit}
                         onChange={(e) => setLimit(Number(e.target.value))}
@@ -102,7 +128,7 @@ function Phones() {
                         <option value={32}>32</option>
                     </select>
                 </div>
-                <div className="mt-4 flex items-center justify-between">
+                <div className="mt-4 flex items-center justify-between px-4">
                     <button
                         onClick={handlePrevPage}
                         disabled={page === 1}
@@ -110,7 +136,7 @@ function Phones() {
                     >
                         <span>&lt;</span>
                     </button>
-                    <span>
+                    <span className="text-center">
                         Strona {page} z {totalPages}
                     </span>
                     <button
@@ -121,170 +147,237 @@ function Phones() {
                         <span>&gt;</span>
                     </button>
                 </div>
-                <div className="mt-6 space-y-4">
-                    <h2 className="text-lg font-semibold">Filtry</h2>
-
-                    <input
-                        type="text"
-                        placeholder="Producent"
-                        value={immediateFilters.producent}
-                        onChange={(e) =>
-                            setImmediateFilters((prev) => ({
-                                ...prev,
-                                producent: e.target.value,
-                            }))
-                        }
-                        className="w-full p-2 border rounded"
-                    />
-
-                    <input
-                        type="text"
-                        placeholder="Model"
-                        value={immediateFilters.model}
-                        onChange={(e) =>
-                            setImmediateFilters((prev) => ({
-                                ...prev,
-                                model: e.target.value,
-                            }))
-                        }
-                        className="w-full p-2 border rounded"
-                    />
-
-                    <input
-                        type="text"
-                        placeholder="Kolor"
-                        value={immediateFilters.kolor}
-                        onChange={(e) =>
-                            setImmediateFilters((prev) => ({
-                                ...prev,
-                                kolor: e.target.value,
-                            }))
-                        }
-                        className="w-full p-2 border rounded"
-                    />
-
-                    <select
-                        value={filters.stan}
-                        onChange={(e) =>
-                            setFilters((prev) => ({
-                                ...prev,
-                                stan: e.target.value,
-                            }))
-                        }
-                        className="w-full p-2 border rounded"
+                <div className="flex flex-col mt-4 h-full overflow-auto">
+                    <h2 className="text-lg font-semibold px-4 mb-2">Filtry</h2>
+                    <div
+                        className="overflow-y-auto flex-grow space-y-4 pr-2 mb-4"
+                        style={scrollbarStyles as React.CSSProperties}
                     >
-                        <option value="">Stan: (wszystkie)</option>
-                        <option value="nowy">Stan: Nowy</option>
-                        <option value="używany">Stan: Używany</option>
-                    </select>
+                        <div className="px-4">
+                            <input
+                                type="text"
+                                placeholder="Producent"
+                                value={immediateFilters.producent}
+                                onChange={(e) =>
+                                    setImmediateFilters((prev) => ({
+                                        ...prev,
+                                        producent: e.target.value,
+                                    }))
+                                }
+                                className="w-full p-2 border rounded"
+                            />
+                        </div>
+                        <div className="px-4">
+                            <input
+                                type="text"
+                                placeholder="Model"
+                                value={immediateFilters.model}
+                                onChange={(e) =>
+                                    setImmediateFilters((prev) => ({
+                                        ...prev,
+                                        model: e.target.value,
+                                    }))
+                                }
+                                className="w-full p-2 border rounded"
+                            />
+                        </div>
 
-                    <select
-                        value={filters.kraj}
-                        onChange={(e) =>
-                            setImmediateFilters((prev) => ({
-                                ...prev,
-                                kraj: e.target.value,
-                            }))
-                        }
-                        className="w-full p-2 border rounded"
-                    >
-                        <option value="">Kraje: (Wszystkie)</option>
-                        {countries.map((country: any) => (
-                            <option key={country.code} value={country.code}>
-                                {country.flag} {country.name}
-                            </option>
-                        ))}
-                    </select>
+                        <div className="px-4">
+                            <input
+                                type="text"
+                                placeholder="Kolor"
+                                value={immediateFilters.kolor}
+                                onChange={(e) =>
+                                    setImmediateFilters((prev) => ({
+                                        ...prev,
+                                        kolor: e.target.value,
+                                    }))
+                                }
+                                className="w-full p-2 border rounded"
+                            />
+                        </div>
 
-                    <select
-                        value={
-                            filters.sprawny === undefined
-                                ? ""
-                                : filters.sprawny.toString()
-                        }
-                        onChange={(e) =>
-                            setFilters((prev) => ({
-                                ...prev,
-                                sprawny:
-                                    e.target.value === ""
-                                        ? undefined
-                                        : e.target.value === "true",
-                            }))
-                        }
-                        className="w-full p-2 border rounded"
-                    >
-                        <option value="">Sprawny: (wszystko)</option>
-                        <option value="true">Sprawny: Tak</option>
-                        <option value="false">Sprawny: Nie</option>
-                    </select>
+                        <div className="px-4">
+                            <select
+                                value={filters.stan}
+                                onChange={(e) =>
+                                    setFilters((prev) => ({
+                                        ...prev,
+                                        stan: e.target.value,
+                                    }))
+                                }
+                                className="w-full p-2 border rounded"
+                            >
+                                <option value="">Stan: (wszystkie)</option>
+                                <option value="nowy">Stan: Nowy</option>
+                                <option value="używany">Stan: Używany</option>
+                            </select>
+                        </div>
 
-                    <select
-                        value={
-                            filters.opakowanie === undefined
-                                ? ""
-                                : filters.opakowanie.toString()
-                        }
-                        onChange={(e) =>
-                            setFilters((prev) => ({
-                                ...prev,
-                                opakowanie:
-                                    e.target.value === ""
-                                        ? undefined
-                                        : e.target.value === "true",
-                            }))
-                        }
-                        className="w-full p-2 border rounded"
-                    >
-                        <option value="">Opakowanie: (wszystko)</option>
-                        <option value="true">Opakowanie: Tak</option>
-                        <option value="false">Opakowanie: Nie</option>
-                    </select>
+                        <div className="px-4">
+                            <select
+                                value={filters.kraj}
+                                onChange={(e) =>
+                                    setImmediateFilters((prev) => ({
+                                        ...prev,
+                                        kraj: e.target.value,
+                                    }))
+                                }
+                                className="w-full p-2 border rounded"
+                            >
+                                <option value="">Kraje: (Wszystkie)</option>
+                                {countries.map((country: any) => (
+                                    <option
+                                        key={country.code}
+                                        value={country.code}
+                                    >
+                                        {country.flag} {country.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
-                    <select
-                        value={
-                            filters.posiadany === undefined
-                                ? ""
-                                : filters.posiadany.toString()
-                        }
-                        onChange={(e) =>
-                            setFilters((prev) => ({
-                                ...prev,
-                                posiadany:
-                                    e.target.value === ""
-                                        ? undefined
-                                        : e.target.value === "true",
-                            }))
-                        }
-                        className="w-full p-2 border rounded"
-                    >
-                        <option value="">Posiadany: (wszystko)</option>
-                        <option value="true">Posiadany: Tak</option>
-                        <option value="false">Posiadany: Nie</option>
-                    </select>
+                        <div className="px-4">
+                            <input
+                                type="text"
+                                placeholder="Język"
+                                value={immediateFilters.jezyk}
+                                onChange={(e) =>
+                                    setImmediateFilters((prev) => ({
+                                        ...prev,
+                                        jezyk: e.target.value,
+                                    }))
+                                }
+                                className="w-full p-2 border rounded"
+                            />
+                        </div>
 
-                    <button
-                        onClick={() => {
-                            setImmediateFilters({
-                                producent: "",
-                                model: "",
-                                kolor: "",
-                                stan: "",
-                                kraj: "",
-                                jezyk: "",
-                                simlock: "",
-                            });
-                            setFilters((prev) => ({
-                                ...prev,
-                                sprawny: undefined,
-                                opakowanie: undefined,
-                                posiadany: undefined,
-                            }));
-                        }}
-                        className="w-full p-2 bg-gray-200 rounded hover:bg-gray-300"
-                    >
-                        Wyczyść filtry
-                    </button>
+                        <div className="px-4">
+                            <input
+                                type="text"
+                                placeholder="Simlock"
+                                value={immediateFilters.simlock}
+                                onChange={(e) =>
+                                    setImmediateFilters((prev) => ({
+                                        ...prev,
+                                        simlock: e.target.value,
+                                    }))
+                                }
+                                className="w-full p-2 border rounded"
+                            />
+                        </div>
+
+                        <div className="px-4">
+                            <input
+                                type="text"
+                                placeholder="Rok produkcji"
+                                value={immediateFilters.rok_produkcji}
+                                onChange={(e) =>
+                                    setImmediateFilters((prev) => ({
+                                        ...prev,
+                                        rok_produkcji: e.target.value,
+                                    }))
+                                }
+                                className="w-full p-2 border rounded"
+                            />
+                        </div>
+
+                        <div className="px-4">
+                            <select
+                                value={
+                                    filters.sprawny === undefined
+                                        ? ""
+                                        : filters.sprawny.toString()
+                                }
+                                onChange={(e) =>
+                                    setFilters((prev) => ({
+                                        ...prev,
+                                        sprawny:
+                                            e.target.value === ""
+                                                ? undefined
+                                                : e.target.value === "true",
+                                    }))
+                                }
+                                className="w-full p-2 border rounded"
+                            >
+                                <option value="">Sprawny: (wszystko)</option>
+                                <option value="true">Sprawny: Tak</option>
+                                <option value="false">Sprawny: Nie</option>
+                            </select>
+                        </div>
+
+                        <div className="px-4">
+                            <select
+                                value={
+                                    filters.opakowanie === undefined
+                                        ? ""
+                                        : filters.opakowanie.toString()
+                                }
+                                onChange={(e) =>
+                                    setFilters((prev) => ({
+                                        ...prev,
+                                        opakowanie:
+                                            e.target.value === ""
+                                                ? undefined
+                                                : e.target.value === "true",
+                                    }))
+                                }
+                                className="w-full p-2 border rounded"
+                            >
+                                <option value="">Opakowanie: (wszystko)</option>
+                                <option value="true">Opakowanie: Tak</option>
+                                <option value="false">Opakowanie: Nie</option>
+                            </select>
+                        </div>
+
+                        <div className="px-4">
+                            <select
+                                value={
+                                    filters.posiadany === undefined
+                                        ? ""
+                                        : filters.posiadany.toString()
+                                }
+                                onChange={(e) =>
+                                    setFilters((prev) => ({
+                                        ...prev,
+                                        posiadany:
+                                            e.target.value === ""
+                                                ? undefined
+                                                : e.target.value === "true",
+                                    }))
+                                }
+                                className="w-full p-2 border rounded"
+                            >
+                                <option value="">Posiadany: (wszystko)</option>
+                                <option value="true">Posiadany: Tak</option>
+                                <option value="false">Posiadany: Nie</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
+                <button
+                    onClick={() => {
+                        setImmediateFilters({
+                            producent: "",
+                            model: "",
+                            kolor: "",
+                            stan: "",
+                            kraj: "",
+                            jezyk: "",
+                            simlock: "",
+                            rok_produkcji: "",
+                        });
+                        setFilters((prev) => ({
+                            ...prev,
+                            sprawny: undefined,
+                            opakowanie: undefined,
+                            posiadany: undefined,
+                        }));
+                    }}
+                    className="w-auto p-2 bg-gray-200 rounded hover:bg-gray-300 mx-4"
+                >
+                    Wyczyść filtry
+                </button>
             </div>
 
             <div className="flex flex-row w-full h-full gap-4 flex-wrap 2xl overflow-y-auto mt-4">
