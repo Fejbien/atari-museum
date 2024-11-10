@@ -12,17 +12,41 @@ export const POST: APIRoute = async ({
     if (!accessToken || !refreshToken)
         return new Response("Unauthorized", { status: 401 });
 
+    let userAuthId = null;
     const { data: userAuth, error: userAuthError } =
         await supabase.auth.getUser(accessToken.value);
-    console.log(userAuth.user?.role);
+    userAuthId = userAuth.user?.id;
 
-    if (userAuthError) return new Response("Unauthorized", { status: 401 });
+    if (userAuthError) {
+        const { data: refreshResponse, error: refreshError } =
+            await supabase.auth.refreshSession({
+                refresh_token: refreshToken.value,
+            });
 
+        if (refreshError) return new Response("Unauthorized", { status: 401 });
+
+        if (refreshResponse.session?.access_token) {
+            cookies.set("accessToken", refreshResponse.session.access_token, {
+                path: "/",
+            });
+        } else return new Response("Access token not found", { status: 401 });
+
+        if (refreshResponse.session?.refresh_token) {
+            cookies.set("refreshToken", refreshResponse.session.refresh_token, {
+                path: "/",
+            });
+        } else return new Response("Refresh token not found", { status: 401 });
+
+        const { data: userAuthRefresh, error: userAuthRefreshError } =
+            await supabase.auth.getUser(refreshResponse.session.access_token);
+
+        userAuthId = userAuthRefresh.user?.id;
+    }
     // Admin check Start
     const { data: adminCheck, error: adminError } = await supabase
         .from("admins")
         .select("admin_id")
-        .eq("admin_id", userAuth.user?.id)
+        .eq("admin_id", userAuthId)
         .single();
 
     if (adminError) return new Response("Unauthorized", { status: 401 });

@@ -53,6 +53,9 @@ const isLogged = accessToken && refreshToken;
 const params = Astro.url.searchParams;
 const id = params.get("id");
 
+// ???????? No ID provided in the URL ??????????????????
+console.log("ID: ", id);
+
 if (!id) {
     console.error("No ID provided in the URL");
     return Astro.redirect("/phones");
