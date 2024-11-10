@@ -4,9 +4,7 @@
 
 Dla [Atari](https://atarimuzeum.pl) [muzeum](https://atarimuzeum.pl)!
 
-TODOs:
+## Deployments:
 
--   Dodanie filtrowania
--   Dodanie paganacji
--   Rework formularzy dodawania
--   Dodanie kalendarzu z eventami
+-   [main](https://atari-museum.vercel.app)
+-   [preview](https://atari-museum-git-preview-fejbiens-projects.vercel.app)
