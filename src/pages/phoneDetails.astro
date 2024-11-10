@@ -53,6 +53,9 @@ const isLogged = accessToken && refreshToken;
 const params = Astro.url.searchParams;
 const id = params.get("id");
 
+// ???????? No ID provided in the URL ??????????????????
+console.log("ID: ", id);
+
 if (!id) {
     console.error("No ID provided in the URL");
     return Astro.redirect("/phones");
@@ -163,10 +166,6 @@ const imageUrls = imageNames?.map((imageName: string) => {
                     <p class="p-2">
                         <span class="font-bold">simlock:</span>
                         {data.simlock}
-                    </p>
-                    <p class="p-2 text-wrap">
-                        <span class="font-bold">uwagi:</span>
-                        {data.uwagi}
                     </p>
                     <p class="p-2">
                         <span class="font-bold">opakowanie:</span>

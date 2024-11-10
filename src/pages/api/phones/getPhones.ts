@@ -105,8 +105,12 @@ export const GET: APIRoute = async ({ request }): Promise<Response> => {
     if (filters.kraj !== null) query = query.eq("kraj", filters.kraj);
     if (filters.jezyk !== null) query = query.eq("jezyk", filters.jezyk);
     if (filters.simlock !== null) query = query.eq("simlock", filters.simlock);
-    if (filters.rok_produkcji !== null)
-        query = query.eq("rok_produkcji", filters.rok_produkcji);
+    if (filters.rok_produkcji !== null) {
+        const year = filters.rok_produkcji;
+        query = query
+            .gte("rok_produkcji", `${year}-01-01`)
+            .lte("rok_produkcji", `${year}-12-31`);
+    }
     if (filters.sprawny !== null) query = query.eq("sprawny", filters.sprawny);
     if (filters.opakowanie !== null)
         query = query.eq("opakowanie", filters.opakowanie);
