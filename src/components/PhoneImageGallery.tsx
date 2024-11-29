@@ -1,8 +1,14 @@
 import { useState } from "react";
-
-// TODO Add loading state for images
+import ImageFetching from "./ImageFetching";
 
 function PhoneImageGallery({ imageUrls }: { imageUrls: string[] }) {
+    if (imageUrls.length === 0)
+        return (
+            <div className="w-full h-full flex justify-center items-center">
+                <p className="text-7xl">Brak Zdjęć</p>
+            </div>
+        );
+
     return (
         <>
             {imageUrls &&
@@ -15,14 +21,14 @@ function PhoneImageGallery({ imageUrls }: { imageUrls: string[] }) {
 
 function SingleImage({ imageUrl }: { imageUrl: string }) {
     const [isFullPage, setIsFullPage] = useState(false);
+    const [image, setImageSrc] = useState<string | null>(null);
 
     return (
         <>
-            <img
-                src={imageUrl}
-                alt="image"
-                className="max-h-80 w-auto border-[3px] border-black"
-                loading="lazy"
+            <ImageFetching
+                url={imageUrl}
+                style="max-h-80 w-auto border-[3px] border-black"
+                alt="phone"
                 onClick={() => {
                     setIsFullPage(true);
                 }}

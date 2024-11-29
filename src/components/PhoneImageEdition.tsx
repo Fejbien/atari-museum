@@ -1,4 +1,5 @@
 import { useState, type FormEvent, type FormEventHandler } from "react";
+import ImageFetching from "./ImageFetching";
 
 // TODO Add chip showing what was done
 
@@ -129,10 +130,10 @@ function SingleImage({
 
     return (
         <>
-            <img
-                src={imageUrl}
-                alt="image"
-                className={classes}
+            <ImageFetching
+                url={imageUrl}
+                style={classes}
+                alt="phone"
                 onClick={() => {
                     handleSelected(id);
                 }}
